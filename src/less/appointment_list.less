@@ -1,0 +1,24 @@
+.home{
+  text-align: left;
+  padding: 16px 15px;
+  background-color: #fff;
+}
+.date{
+  margin-left: 12px;
+}
+:global {
+  .appointment_list .am-list-body::after{
+    content: ' ';
+    height: 0 !important;
+  }
+}
+.btn-group{
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.btn-group [role=button]{
+  margin-right: 5px;
+}
+.btn-group [role=button]:last-of-type{
+  margin-right: 0;
+}

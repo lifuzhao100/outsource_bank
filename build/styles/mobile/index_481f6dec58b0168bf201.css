@@ -1,0 +1,23 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+#root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.content {
+  width: 90%;
+  max-width: 1360px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+
+/*# sourceMappingURL=index_481f6dec58b0168bf201.css.map*/

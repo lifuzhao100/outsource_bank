@@ -1,0 +1,51 @@
+.layout{
+  width: 100%;
+  height: 100%;
+}
+.header, .content{
+  width: 90%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+.no-padding{
+  padding: 0;
+}
+.header-left{
+  float: left;
+}
+.header-right{
+  float: right;
+}
+.user-name{
+  color: #ffffff;
+  margin-left: 12px;
+}
+.content{
+  height: 100%;
+  box-sizing: border-box;
+}
+.flex{
+  display: flex;
+}
+.middle{
+  justify-content: center;
+  align-items: center;
+}
+.main{
+  height: 100%;
+  flex-shrink: 1;
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.page-title{
+  height: 45px;
+  line-height: 45px;
+}
+.page-main{
+  flex-grow: 1;
+  height: 50%;//加一个随意值，让子级元素继承
+}
