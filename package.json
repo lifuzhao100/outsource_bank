@@ -20,11 +20,14 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^4.10.1",
     "webpack-cli": "^2.1.4",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "antd": "^3.5.4",
     "antd-mobile": "^2.1.10",
+    "axios": "^0.18.0",
+    "history": "^4.7.2",
     "koa": "^2.5.1",
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.3",
@@ -33,6 +36,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2"
   },
   "name": "bank",
@@ -40,7 +44,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config=config/dev.js --hot",
-    "build": "webpack --config=config/build.js --progress",
+    "build": "webpack --config=config/build.js --progress --profile --json > stats.json",
     "start": "node server.js"
   },
   "keywords": [],

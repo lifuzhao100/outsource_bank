@@ -4,13 +4,10 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
 let UglifyJs = require('uglifyjs-webpack-plugin');
-module.exports = {
+let merge = require('webpack-merge');
+let base = {
 	mode: 'production',
 	context: resolve(root, 'src'),
-	entry: {
-		'pc/index': './index.pc.js',
-		'mobile/index': './index.mobile.js'
-	},
 	output: {
 		filename: '[name]_[hash].js',
 		chunkFilename: '[name]_[chunkhash].js',
@@ -19,16 +16,16 @@ module.exports = {
 	},
 	devtool: 'source-map',
 	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendor: {
-					test: /[\/\\]node_modules[\/\\]react.*\.js$/,
-					name: 'vendor',
-					chunks: 'all',
-					enforce: true
-				}
-			}
-		},
+		// splitChunks: {
+		// 	cacheGroups: {
+		// 		vendor: {
+		// 			test: /[\/\\]node_modules[\/\\]react.*\.js$/,
+		// 			name: 'vendor',
+		// 			chunks: 'all',
+		// 			enforce: true
+		// 		}
+		// 	}
+		// },
 		minimize: true,
 		minimizer: [
 			new webpack.DefinePlugin(({
@@ -99,6 +96,15 @@ module.exports = {
 			filename: 'styles/[name]_[contenthash].css',
 			chunkFilename: 'styles/[name]_[hash].css'
 		}),
+		new webpack.HashedModuleIdsPlugin()
+	]
+};
+module.exports = [merge(base, {
+	name: 'pc',
+	entry: {
+		'pc/index': './index.pc.js'
+	},
+	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'pc/index.html',
 			template: './index.html',
@@ -106,13 +112,19 @@ module.exports = {
 			inject: 'body',
 			chunks: ['pc/index', 'vendor']
 		}),
+	]
+}), merge(base, {
+	name: 'mobile',
+	entry: {
+		'mobile/index': './index.mobile.js',
+	},
+	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'mobile/index.html',
 			template: './index.html',
 			title: 'mobile',
 			inject: 'body',
 			chunks: ['mobile/index', 'vendor'],
-		}),
-		new webpack.HashedModuleIdsPlugin()
+		})
 	]
-};
+})];

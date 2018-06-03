@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Spin } from 'antd';
 class Wrapper extends Component{
 	state = {
 		Comp: null
@@ -6,15 +7,11 @@ class Wrapper extends Component{
 	render(){
 		let { Comp } = this.state;
 		let props = this.props;
-		if(!Comp) return Comp;
+		if(!Comp) return <div style={{width: '100%', height: '100%', textAlign: 'center'}}><Spin/></div>;
 		return <Comp {...props}/>
 	}
 	componentDidMount(){
 		let { component } = this.props;
-		this.load(component);
-	}
-	componentWillReceiveProps(nextProps){
-		let { component } = nextProps;
 		this.load(component);
 	}
 	load = (component) => {

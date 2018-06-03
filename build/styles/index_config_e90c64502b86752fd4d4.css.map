@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./less/E:/zb/bank2/src/less/index.config.less","webpack:///./less/index.config.less"],"names":[],"mappings":"AAAA;EACE;CCCD","file":"styles/index_config_e90c64502b86752fd4d4.css","sourcesContent":[".operate > *{\n  margin: 0 10px ;\n}\n",".operate > * {\n  margin: 0 10px ;\n}\n"],"sourceRoot":""}

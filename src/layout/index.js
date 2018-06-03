@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import { Layout, Button,Avatar, Popconfirm } from 'antd';
 const { Header, Content } = Layout;
+import { Redirect } from 'react-router-dom';
 import styles from '../less/layout.less';
 import multipleClass from '../helpers/multiple_class';
 import SiderTree from '../components/sider_tree';
+import { observer } from 'mobx-react';
+import globalStore from '../stores/global';
+@observer
 class BasicLayout extends Component{
+	state = {
+		doLogout: false
+	};
 	render(){
-		let { children, title = '预约管理' } = this.props;
+		let { children, title } = this.props;
+		let { doLogout } = this.state;
+		let { username } = globalStore;
 		return (
 			<Layout className={multipleClass(styles, 'layout')}>
 				<Header className={multipleClass(styles, 'no-padding')}>
@@ -15,9 +24,9 @@ class BasicLayout extends Component{
 							<Button>预约管理</Button>
 						</div>
 						<div className={multipleClass(styles, 'header-right')}>
-							<Popconfirm placement='bottomRight' cancelText='取消' okText='确认' title='是否确认退出登录？'>
+							<Popconfirm placement='bottomRight' onConfirm={this.doLogout} cancelText='取消' okText='确认' title='是否确认退出登录？'>
 								<Avatar src='http://www.iconpng.com/png/winter_lollipop/heart.png'/>
-								<span className={multipleClass(styles, 'user-name')}>lifuzhao</span>
+								<span className={multipleClass(styles, 'user-name')}>{username}</span>
 							</Popconfirm>
 						</div>
 					</div>
@@ -33,8 +42,18 @@ class BasicLayout extends Component{
 						</div>
 					</div>
 				</Content>
+				{ doLogout ? <Redirect to='/login' push={true}/> : null }
 			</Layout>
 		)
+	}
+	doLogout = () => {
+		this.setState({
+			doLogout: true
+		}, () => {
+			this.setState({
+				doLogout: false
+			})
+		})
 	}
 }
 export default BasicLayout;

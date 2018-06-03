@@ -56,13 +56,13 @@ class BankConfig extends Component{
 	render(){
 		let { visible } = store;
 		return (
-			<BasicLayout title='银行配置'>
+			<React.Fragment>
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Button type='primary' onClick={this.openModal}>新增</Button>
 				</div>
 				<Table columns={this.columns}/>
 				<AddBankWithForm visible={visible}/>
-			</BasicLayout>
+			</React.Fragment>
 		)
 	}
 	openModal = () => {

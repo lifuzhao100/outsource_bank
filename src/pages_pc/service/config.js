@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, Form, Input, Radio } from 'antd';
 import { observer } from 'mobx-react';
-import BasicLayout from '../../layout/index';
 const { TextArea } = Input;
 import styles from  '../../less/index.config.less';
 import modalStyle from '../../less/modal_common.less';
@@ -39,13 +38,13 @@ class ServiceConfig extends Component{
 	render(){
 		let { visible } = store;
 		return (
-			<BasicLayout title='银行配置'>
+			<React.Fragment>
 				<div style={{textAlign: 'right', paddingBottom: '24px'}}>
 					<Button type='primary' onClick={this.openModal}>新增</Button>
 				</div>
 				<Table columns={this.columns}/>
 				<AddModalWithForm visible={visible}/>
-			</BasicLayout>
+			</React.Fragment>
 		)
 	}
 	openModal = () => {

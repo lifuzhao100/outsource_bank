@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Menu } from 'antd';
-import { Link } from 'react-router-dom';
 import styles from '../less/sider_tree.less';
 import multipleClass from '../helpers/multiple_class';
+import history from '../history';
 class SiderTree extends Component{
 	menu = [{
 		path: '/appointment/index',
@@ -21,11 +21,16 @@ class SiderTree extends Component{
 		title: '修改密码'
 	}];
 	render(){
+		let { location: { pathname }} = history;
 		return (
 			<div className={multipleClass(styles, 'sider')}>
-				<Menu>{this.menu.map(item => <Menu.Item key={item.path}><Link to={item.path}>{item.title}</Link></Menu.Item>)}</Menu>
+				<Menu defaultSelectedKeys={[pathname]}>{this.menu.map(item => <Menu.Item key={item.path}><a onClick={(e) => this.go(e, item.path)}>{item.title}</a></Menu.Item>)}</Menu>
 			</div>
 		)
+	}
+	go = (e, path) => {
+		e.preventDefault();
+		history.push(path);
 	}
 }
 export default SiderTree;

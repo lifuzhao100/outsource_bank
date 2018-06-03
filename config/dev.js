@@ -75,6 +75,12 @@ module.exports = {
 	devServer: {
 		contentBase: resolve(root, 'build'),
 		port: 7000,
-		hot: true
+		hot: true,
+		proxy: {
+			"/api": {
+				target: "http://test.mengant.cn/",
+				changeOrigin: true
+			}
+		}
 	}
 };

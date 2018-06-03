@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import BasicLayout from '../../layout/index';
 import styles from  '../../less/index.config.less';
 import multipleClass from '../../helpers/multiple_class';
 class IndexConfig extends Component{
 	render(){
 		return (
-			<BasicLayout title='首页配置'>
-				<Table columns={this.columns}/>
-			</BasicLayout>
+			<Table columns={this.columns}/>
 		)
 	}
 	columns = [{
