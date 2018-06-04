@@ -78,7 +78,7 @@ module.exports = {
 		hot: true,
 		proxy: {
 			"/api": {
-				target: "http://test.mengant.cn/",
+				target: "http://bank.mengant.cn/",
 				changeOrigin: true
 			}
 		}

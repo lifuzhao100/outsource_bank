@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, Form, Avatar, Upload, Icon, Input } from 'antd';
-import BasicLayout from '../../layout/index';
 import styles from  '../../less/index.config.less';
 import modalStyle from '../../less/modal_common.less';
 import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
 import store from '../../stores/bank.config';
+import axios from 'axios';
+import { SIZE } from '../../config/CONSTANT';
 class AddBank extends Component{
 	render(){
-		let { img_url } = store;
+		let { bank_list } = store;
 		let { visible, form } = this.props;
 		let { getFieldDecorator } = form;
+
 		return (
 			<Modal visible={visible} onCancel={this.closeModal} title={<p className={multipleClass(modalStyle, 'modal-title')}>新建银行<small>填写银行信息</small></p>}>
 				<Form>
@@ -54,17 +56,39 @@ const AddBankWithForm = Form.create()(AddBank);
 @observer
 class BankConfig extends Component{
 	render(){
-		let { visible } = store;
+		let { visible, bank_list } = store;
+		let dataSource = Array.from(bank_list);
 		return (
 			<React.Fragment>
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Button type='primary' onClick={this.openModal}>新增</Button>
 				</div>
-				<Table columns={this.columns}/>
+				<Table columns={this.columns} dataSource={dataSource}/>
 				<AddBankWithForm visible={visible}/>
 			</React.Fragment>
 		)
 	}
+	componentDidMount(){
+		this.getBankList();
+	}
+	getBankList = (page = 1) => {
+		axios.get('/api/v1/cms/banks', {
+			params: {
+				page,
+				size: SIZE
+			}
+		})
+			.then(res => {
+				let resData = res.data || [];
+				let { data, total } = resData;
+				console.log(data);
+				store.bank_list = data;
+				store.total = total;
+			})
+			.catch(res => {
+
+			})
+	};
 	openModal = () => {
 		store.visible = true;
 	};
@@ -75,7 +99,8 @@ class BankConfig extends Component{
 	}, {
 		key: 'logo',
 		title: 'logo',
-		dataIndex: 'logo'
+		dataIndex: 'logo',
+		render: (logo) => <Avatar src={logo} shape='square' size='large' style={{margin: '-50px 0'}}/>
 	}, {
 		key: 'name',
 		title: '名称',
@@ -85,9 +110,10 @@ class BankConfig extends Component{
 		title: '预约上线',
 		dataIndex: 'order'
 	},{
-		key: 'admin',
+		key: 'user',
 		title: '管理员',
-		dataIndex: 'admin'
+		dataIndex: 'user',
+		render: user => user && user.real_name || <a>生成绑定链接</a>
 	}, {
 		title: '操作',
 		render: (text, record) => (

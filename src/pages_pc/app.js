@@ -4,6 +4,7 @@ import routes from '../routes_pc';
 import handleRoutes from '../helpers/handle_routes';
 const routeArr = handleRoutes(routes);
 import BasicLayout from '../layout/index';
+import { Redirect } from 'react-router';
 class App extends Component{
 	render(){
 		return(
@@ -12,7 +13,9 @@ class App extends Component{
 					if(withoutNav) return <Component {...props}/>;
 					return <BasicLayout title={title}><Component {...props}/></BasicLayout>;
 				 }}/>)
-			}</Switch>
+			}
+				<Route render={() => <Redirect to='/appointment/index'/>}/>
+			</Switch>
 		)
 	}
 }

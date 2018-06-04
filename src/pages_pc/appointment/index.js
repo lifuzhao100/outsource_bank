@@ -105,19 +105,24 @@ class Appointment extends Component{
 	};
 	columns = [{
 		title: '银行名称',
+		key: 'bank_name',
 		dataIndex: 'bank_name'
 	}, {
 		title: '预约人',
+		key: 'name',
 		dataIndex: 'name'
 	}, {
 		title: '预约服务',
+		key: 'type',
 		dataIndex: 'type',
 		render: (text, record) => <span>{record.service}{record.service_item ? '/' + record.service_item : ''}</span>
 	}, {
 		title: '预约时间',
+		key: 'day',
 		dataIndex: 'day'
 	}, {
 		title: '状态',
+		key: 'state',
 		dataIndex: 'state',
 		render: state => {
 			let states = ['', '待处理', '已处理', '拒绝', '已取消'];
@@ -125,6 +130,7 @@ class Appointment extends Component{
 		}
 	}, {
 		title: '操作人',
+		key: 'admin',
 		dataIndex: 'admin'
 	}];
 }

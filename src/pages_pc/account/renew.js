@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,message } from 'antd';
 import styles from '../../less/renew.less';
 import multipleClass from '../../helpers/multiple_class';
 import getToken from '../../helpers/get_token';
 import haveError from '../../helpers/have_error';
+import history from '../../history';
 import axios from 'axios';
 class Renew extends Component{
 	oldPwdTouched = false;
@@ -100,12 +101,16 @@ class Renew extends Component{
 		if(new_pwd !== repeat_pwd)return;
 		let token = getToken();
 		if(token){
-			axios.post('/api/v1/user/update',{
+			axios.post('/api/v1/token/update',{
 				old_pwd,
 				new_pwd
 			})
 				.then(res => {
-
+					let resData = res.data;
+					message.success('修改密码成功，2秒后将退出重新登陆');
+					setTimeout(() => {
+						history.push('/login');
+					}, 2000);
 				})
 				.catch(res => {
 

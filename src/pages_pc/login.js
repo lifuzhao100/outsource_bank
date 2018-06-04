@@ -4,8 +4,7 @@ import multipleClass from '../helpers/multiple_class';
 import { Form, Input, Button } from 'antd';
 import haveError from '../helpers/have_error';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
-import globalStore from '../stores/global';
+import history from '../history';
 class Login extends Component{
 	isPhoneTOuched = false;
 	isPasswdTouched = false;
@@ -67,7 +66,6 @@ class Login extends Component{
 						</Form>
 					</div>
 				</div>
-				{ loginSuccess ? <Redirect to='/appointment/index'/> : null}
 			</div>
 		)
 	}
@@ -79,15 +77,14 @@ class Login extends Component{
 		let { getFieldsValue, setFields } = this.props.form;
 		let values = getFieldsValue();
 		if(!values.phone || !values.passwd) return;
-		axios.post('/api/v1/token/admin', {
-			params: values
-		})
+		axios.post('/api/v1/token/admin', values)
 			.then(res => {
 				let { data } = res;
 				sessionStorage.setItem('token', data['token']);
 				sessionStorage.setItem('username', data['username']);
 				sessionStorage.setItem('u_id', data['u_id']);
 				sessionStorage.setItem('phone', values.phone);
+				history.push('/appointment/index');
 			}).catch(res => {
 				let { response: {data: {error_code}} } = res;
 				if(error_code === 30000){
