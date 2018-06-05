@@ -190,6 +190,7 @@ class BankConfig extends Component{
 		render: user => user && user.real_name || <a>绑定管理员</a>
 	}, {
 		title: '操作',
+		dataIndex: '',
 		render: (text, record) => (
 			<div className={multipleClass(styles, 'operate')}>
 				<a>停用</a>
