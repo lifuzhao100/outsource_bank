@@ -7,7 +7,12 @@ let getWxToken = () => {
 		}else{
 			axios.get('/api/v1/token/user')
 				.then(res => {
+					console.log(res.data);
 					alert(res.data);
+				})
+				.catch(res => {
+					console.log('error');
+					console.log(res.data);
 				})
 		}
 	});

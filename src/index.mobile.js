@@ -1,3 +1,5 @@
+import VConsole from 'vconsole';
+window.vConsole = new VConsole();
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
