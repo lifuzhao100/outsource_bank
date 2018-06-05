@@ -18,7 +18,7 @@ class Index extends Component{
 			<div className={multipleClass(styles, 'index')}>
 				<WingBlank>
 					<div>
-						{/*<img src={banner} style={{width: '100%'}}/>*/}
+						<img src={banner} style={{width: '100%'}}/>
 					</div>
 					<section className={multipleClass(styles, 'grid-section')}>
 						<h3>
@@ -69,6 +69,7 @@ class Index extends Component{
 		axios.get('/api/v1/wx/navs')
 			.then(res => {
 				let resData = res.data;
+				console.log(resData);
 				// store.index_list = resData;
 				store.index_list = [{
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
