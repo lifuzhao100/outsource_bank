@@ -6,47 +6,18 @@ import { observer } from 'mobx-react';
 import store from '../../stores/appointment_list';
 import moment from 'moment';
 moment.locale('zh_cn');
-const data = [
-	{
-		img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-		title: 'Meet hotel',
-		des: '不是所有的兼职汪都需要风吹日晒',
-	},
-	{
-		img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-		title: 'McDonald\'s invites you',
-		des: '不是所有的兼职汪都需要风吹日晒',
-	},
-	{
-		img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-		title: 'Eat the week',
-		des: '不是所有的兼职汪都需要风吹日晒',
-	},
-];
-const NUM_ROWS = 2;
-let pageIndex = 0;
-
-function genData(pIndex = 0) {
-	const dataBlob = {};
-	for (let i = 0; i < NUM_ROWS; i++) {
-		const ii = (pIndex * NUM_ROWS) + i;
-		dataBlob[`${ii}`] = `row - ${ii}`;
-	}
-	return dataBlob;
-}
-let dataSource = new ListView.DataSource({
-	rowHasChanged: (row1, row2) => row1 !== row2,
-});
-dataSource = dataSource.cloneWithRows(genData());
+import axios from 'axios';
+import { SIZE, MALE, FEMALE} from "../../config/CONSTANT";
+import getWxToken from '../../helpers/get_wx_token';
 @observer
 class AppointmentList extends Component{
-	constructor(props){
-		super(props);
-		store.date = moment().toDate()
-	}
+	dataSource = new ListView.DataSource({
+		rowHasChanged: (row1, row2) => row1 !== row2,
+	});
 	render(){
-		let { date, visible } = store;
-		console.log(dataSource);
+		let { date, visible, appointment_list } = store;
+		let appointmentList = Array.from(appointment_list);
+		this.dataSource = this.dataSource.cloneWithRows(appointmentList);
 		const separator = (sectionID, rowID) => (
 			<div
 				key={`${sectionID}-${rowID}`}
@@ -56,20 +27,15 @@ class AppointmentList extends Component{
 				}}
 			/>
 		);
-		let index = data.length - 1;
 		const row = (rowData, sectionID, rowID) => {
-			if (index < 0) {
-				index = data.length - 1;
-			}
-			const obj = data[index--];
 			return (
 				<div key={rowID} style={{ padding: '0 15px' }}>
 					<div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
-						<img style={{ height: '64px', marginRight: '15px' }} src={obj.img} alt="" />
-						<div style={{ lineHeight: 1 }}>
-							<div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
-							<p>{obj.address}, {obj.sex}</p>
-							<p>{obj.serveType}</p>
+						<img style={{ height: '64px', marginRight: '15px' }} src={rowData.img} alt="" />
+						<div style={{ lineHeight: 1, flexGrow: 1, flexShrink: 1 }}>
+							<div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{rowData.name}</div>
+							<p>{rowData.address}, {rowData.sex}</p>
+							<p>{rowData.service + '/' +rowData.service_item}{rowData.money > 0 ? '/' + rowData.money : ''}</p>
 						</div>
 						<div className={multipleClass(styles, 'btn-group')}>
 							<Button inline={true} size='small' type='warning'>拒绝</Button>
@@ -99,7 +65,7 @@ class AppointmentList extends Component{
 					onOk={this.setDate}
 				/>
 				<ListView
-					dataSource={dataSource}
+					dataSource={this.dataSource}
 					renderSectionHeader={() => <span>预约列表</span>}
 					renderRow={row}
 					renderSeparator={separator}
@@ -112,6 +78,54 @@ class AppointmentList extends Component{
 			</div>
 		)
 	}
+	componentDidMount(){
+		this.getAppointmentList();
+	}
+	getAppointmentList = (page = 1) => {
+		let { day } = store;
+		getWxToken()
+		axios.get('/api/v1/orders/wx', {
+			params: {
+				page,
+				size: SIZE,
+				day: day
+			}
+		})
+			.then(res => {
+				let resData = res.data;
+				let appointmentList = Array.from(store.appointment_list);
+				let orders = [{
+					"name": "朱明良",
+					"phone": "18956225230",
+					"identity": "34262619901001****",
+					"sex": 1,
+					"service": "ATM机",
+					"service_item": "ATM机吞卡",
+					"day": "2018-06-02 00:00:00",
+					"state": "1",
+					"money": 2
+				}, {
+					"name": "朱明良",
+					"phone": "18956225230",
+					"identity": "34262619901001****",
+					"sex": 1,
+					"service": "ATM机",
+					"service_item": "ATM机吞卡",
+					"day": "2018-06-02 10:00:00",
+					"state": "1",
+					"money": 2
+				}];
+				if(resData.user_grade === 1){
+					store.appointment_list = appointmentList.concat(orders);
+				}else{
+					store.appointment_list = resData.data;
+					store.total = resData.total;
+				}
+			})
+			.catch(res => {
+
+			});
+	};
 	openDateModal = () => {
 		store.visible = true;
 	};

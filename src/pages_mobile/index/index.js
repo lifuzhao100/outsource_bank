@@ -1,38 +1,17 @@
 import React, { Component } from 'react';
 import { WingBlank, Grid } from 'antd-mobile';
-import { Link } from 'react-router-dom';
 import banner from '../../imgs/banner.png';
 import head from '../../imgs/head.png';
 import bottom from '../../imgs/bottom.png';
 import styles from '../../less/index.mobile.less';
 import multipleClass from '../../helpers/multiple_class';
-import panel1 from '../../imgs/panel-1.png'
-import panel2 from '../../imgs/panel-2.png'
-import panel3 from '../../imgs/panel-3.png'
-import panel4 from '../../imgs/panel-4.png'
-import panel5 from '../../imgs/panel-5.png'
-import panel6 from '../../imgs/panel-6.png'
-const data = [{
-	img: panel1,
-	to: '/appointment/new'
-}, {
-	img: panel2,
-	to: '/appointment/new'
-}, {
-	img: panel3,
-	to: '/appointment/new'
-}, {
-	img: panel4,
-	to: '/appointment/new'
-}, {
-	img: panel5,
-	to: '/appointment/new'
-}, {
-	img: panel6,
-	to: '/appointment/new'
-}];
+import { observer } from 'mobx-react';
+import store from '../../stores/index_index';
+import axios from 'axios';
+@observer
 class Index extends Component{
 	render(){
+		let list = Array.from(store.index_list);
 		return (
 			<div className={multipleClass(styles, 'index')}>
 				<WingBlank>
@@ -45,11 +24,11 @@ class Index extends Component{
 						</h3>
 						<Grid
 							columnNum={3}
-							data={data}
+							data={list}
 							renderItem={dataItem => (
-								<Link to={dataItem.to}>
-									<img src={dataItem.img} style={{width: '100%'}}/>
-								</Link>
+								<a href={dataItem.url}>
+									<img src={dataItem.logo} style={{width: '100%'}}/>
+								</a>
 							)}
 						/>
 					</section>
@@ -64,6 +43,11 @@ class Index extends Component{
 	}
 	componentDidMount(){
 		this.loadScript();
+		this.getIndexList();
+		axios.get('/api/v1/token/user')
+			.then(res => {
+				alert(res.data);
+			})
 	}
 	loadScript = () => {
 		window.init = this.initMap;
@@ -82,6 +66,29 @@ class Index extends Component{
 			mapTypeId: qq.maps.MapTypeId.ROADMAP
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
+	};
+	getIndexList = () => {
+		axios.get('/api/v1/wx/navs')
+			.then(res => {
+				let resData = res.data;
+				// store.index_list = resData;
+				store.index_list = [{
+					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
+					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+				}, {
+					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
+					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+				}, {
+					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
+					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+				},{
+					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
+					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+				}];
+			})
+			.catch(res => {
+
+			})
 	}
 }
 export default Index;

@@ -4,6 +4,8 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
 let UglifyJs = require('uglifyjs-webpack-plugin');
+let Copy = require('copy-webpack-plugin');
+let Clean = require('clean-webpack-plugin');
 module.exports = {
 	mode: 'production',
 	context: resolve(root, 'src'),
@@ -12,8 +14,8 @@ module.exports = {
 		'mobile/index': './index.mobile.js'
 	},
 	output: {
-		filename: '[name]_[hash].js',
-		chunkFilename: '[name]_[chunkhash].js',
+		filename: 'scripts/[id]_[hash].js',
+		chunkFilename: 'scripts/[id]_[chunkhash].js',
 		path: resolve(root, 'build'),
 		publicPath: '/'
 	},
@@ -92,6 +94,16 @@ module.exports = {
 		}]
 	},
 	plugins: [
+		new Clean(['build'], {
+			root: root
+		}),
+		new Copy([{
+			from: 'wx_file/**.*',
+			to: '[name].[ext]',
+			toType: 'template'
+		}], {
+			context: root
+		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production')
 		}),
@@ -108,7 +120,7 @@ module.exports = {
 			chunks: ['vendor','pc/index']
 		}),
 		new HtmlWebpackPlugin({
-			filename: 'mobile/index.html',
+			filename: 'index.html',
 			template: './index.html',
 			title: 'mobile',
 			inject: 'body',
