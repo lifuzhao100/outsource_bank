@@ -121,6 +121,7 @@ class AppointmentList extends Component{
 					store.appointment_list = resData.data;
 					store.total = resData.total;
 				}
+
 			})
 			.catch(res => {
 

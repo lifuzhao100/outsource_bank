@@ -13,11 +13,12 @@ import getWxToken from '../../helpers/get_wx_token';
 class Index extends Component{
 	render(){
 		let list = Array.from(store.index_list);
+		console.log(list);
 		return (
 			<div className={multipleClass(styles, 'index')}>
 				<WingBlank>
 					<div>
-						<img src={banner} style={{width: '100%'}}/>
+						{/*<img src={banner} style={{width: '100%'}}/>*/}
 					</div>
 					<section className={multipleClass(styles, 'grid-section')}>
 						<h3>
@@ -43,13 +44,8 @@ class Index extends Component{
 		)
 	}
 	componentDidMount(){
-		getWxToken();
 		this.loadScript();
 		this.getIndexList();
-		axios.get('/api/v1/token/user')
-			.then(res => {
-				alert(res.data);
-			})
 	}
 	loadScript = () => {
 		window.init = this.initMap;
@@ -76,16 +72,16 @@ class Index extends Component{
 				// store.index_list = resData;
 				store.index_list = [{
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
-					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+					url: 'index.html#/appointment/list'
 				}, {
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
-					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+					url: 'index.html#/appointment/list'
 				}, {
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
-					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+					url: 'index.html#/appointment/list'
 				},{
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',
-					url: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg'
+					url: 'index.html#/appointment/list'
 				}];
 			})
 			.catch(res => {

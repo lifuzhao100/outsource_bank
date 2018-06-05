@@ -72,6 +72,7 @@ module.exports = {
 		}),
 		new webpack.NamedModulesPlugin()
 	],
+	devtool: 'inline-source-map',
 	devServer: {
 		contentBase: resolve(root, 'build'),
 		port: 7000,
