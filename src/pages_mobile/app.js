@@ -18,6 +18,7 @@ class App extends Component{
 		let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 		let { location } = history;
 		if(location.search){
+			console.log(location);
 			let search = location.search.slice(1);
 			let params = search.split('&');
 			let param = {};
@@ -32,6 +33,8 @@ class App extends Component{
 			}else{
 				alert(params.code);
 			}
+		}else{
+			window.location = url;
 		}
 	}
 }
