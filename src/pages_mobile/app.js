@@ -13,7 +13,7 @@ class App extends Component{
 		)
 	}
 	componentDidMount(){
-		// getToken();
+		getToken();
 	}
 }
 export default App;
