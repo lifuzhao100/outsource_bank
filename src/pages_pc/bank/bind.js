@@ -29,7 +29,7 @@ class BankBind extends Component{
 			axios.get('/api/v1/users', {
 				params: {
 					page,
-					SIZE,
+					size: SIZE,
 					key: store.key
 				}
 			}, {headers:{token}})
