@@ -68,7 +68,7 @@ class AppointmentList extends Component{
 			return (
 				<div key={rowID} style={{ padding: '0 15px' }}>
 					<div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
-						<img style={{ height: '64px', marginRight: '15px' }} src={rowData.logo} alt="" />
+						<img style={{ height: '64px', marginRight: '15px' }} src={rowData.headimgurl} alt="" />
 						<div style={{ lineHeight: 1, flexGrow: 1, flexShrink: 1 }}>
 							<div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{rowData.name}</div>
 							<p>{rowData.address}, {rowData.sex === MALE ? '男' : '女'}</p>
@@ -119,6 +119,9 @@ class AppointmentList extends Component{
 	}
 	getAppointmentList = (page = 1) => {
 		let { day } = store;
+		if(page === 1){
+			this.page = 1;//初始化
+		}
 		axios.get('/api/v1/orders/wx', {
 			params: {
 				page,
@@ -217,6 +220,7 @@ class AppointmentList extends Component{
 	setDate = (date) => {
 		store.date = date;
 		store.visible = false;
+		this.getAppointmentList();
 	}
 }
 export default AppointmentList;
