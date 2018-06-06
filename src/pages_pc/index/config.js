@@ -26,6 +26,7 @@ class AddIndex extends Component{
 		if(!logo){
 			logo = inits.logo;
 		}
+		console.log(logo);
 		return (
 			<Modal visible={visible} destroyOnClose={true} confirmLoading={modalLoading} onCancel={this.closeModal} cancelText='取消' onOk={this.confirm} okText='确认' title={<p className={multipleClass(modalStyle, 'modal-title')}>新建首页<small>上传首页图片和链接</small></p>}>
 				<Form>
@@ -60,6 +61,9 @@ class AddIndex extends Component{
 			</Modal>
 		)
 	}
+	componentWillReceiveProps(nextProps){
+
+	}
 	handlePreview = (file) => {
 		let reader = new FileReader();
 		reader.onload = () => {
@@ -74,7 +78,7 @@ class AddIndex extends Component{
 		if(!haveError(errors)){
 			let { url } = this.props.form.getFieldsValue();
 			let { logo, selectItem } = store;
-			let dealLogo = logo.replace(/^data:.*base64,/, '');
+
 			let token = getToken();
 			if(token){
 				store.modalLoading = true;
@@ -82,7 +86,8 @@ class AddIndex extends Component{
 					url: url
 				};
 				if(!!selectItem.id){//修改
-					if(dealLogo){
+					if(logo){
+						let dealLogo = logo.replace(/^data:.*base64,/, '');
 						params.logo = dealLogo;
 					}
 					params.id = selectItem.id;
@@ -97,7 +102,7 @@ class AddIndex extends Component{
 							if(resData.errorCode === 0 || resData.error_code === 0){
 								let list = Array.from(store.indexList).map(item => {
 									if(item.id === params.id){
-										item.logo = logo;
+										item.logo = logo || store.selectItem.logo;
 										item.url = url
 									}
 									return item;
@@ -111,6 +116,7 @@ class AddIndex extends Component{
 							message.error(resData.msg);
 						});
 				}else{//新增
+					let dealLogo = logo.replace(/^data:.*base64,/, '');
 					params.logo = dealLogo;
 					axios.post('/api/v1/nav/save', params, {
 						headers:{
