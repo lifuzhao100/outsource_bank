@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router';
 import routes from '../routes_mobile';
-import handleRoutes from '../helpers/handle_routes';
+import handleRoutes from '../helpers/handle_wx_routes';
 const routeArr = handleRoutes(routes);
 import { getToken } from '../helpers/fresh_token';
 class App extends Component{

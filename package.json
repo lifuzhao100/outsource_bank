@@ -41,8 +41,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router": "^4.2.0"
   },
   "name": "bank",
   "version": "1.0.0",

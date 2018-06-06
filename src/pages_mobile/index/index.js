@@ -13,7 +13,6 @@ import getWxToken from '../../helpers/fresh_token';
 class Index extends Component{
 	render(){
 		let list = Array.from(store.index_list);
-		console.log(list);
 		return (
 			<div className={multipleClass(styles, 'index')}>
 				<WingBlank>
@@ -69,7 +68,6 @@ class Index extends Component{
 		axios.get('/api/v1/wx/navs')
 			.then(res => {
 				let resData = res.data;
-				console.log(resData);
 				// store.index_list = resData;
 				store.index_list = [{
 					logo: 'http://img.zcool.cn/community/01690955496f930000019ae92f3a4e.jpg@2o.jpg',

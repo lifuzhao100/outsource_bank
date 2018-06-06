@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Layout, Button,Avatar, Popconfirm } from 'antd';
 const { Header, Content } = Layout;
-import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import styles from '../less/layout.less';
 import multipleClass from '../helpers/multiple_class';
 import SiderTree from '../components/sider_tree';
