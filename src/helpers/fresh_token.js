@@ -6,7 +6,8 @@ let getCode = () => {
 	return null;
 };
 let wxToken = (notForce, code) => {
-	let origin = encodeURIComponent(location.href);
+	// let origin = encodeURIComponent(location.href);
+	let origin = encodeURIComponent('http://bank.mengant.cn/index.html?code=123#/appointment/list');
 	let appid = 'wxf4b7d664b2461f4b';
 	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect;`
 	//notForce true,上传code供后端获取用户信息 false,强制重新获取code

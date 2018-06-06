@@ -10,7 +10,7 @@ import history from '../../history';
 @observer
 class AppointmentNew extends Component{
 	render(){
-		let { inputPhone ,showMoney, date, bank_list, selected_bank, disableBtn } = store;
+		let { showMoney, date, bank_list, selected_bank, disableBtn } = store;
 		let bankList = Array.from(bank_list);
 		let selectedBank = Array.from(selected_bank);
 		let selectSex = Array.from(store.selectSex);
@@ -89,7 +89,7 @@ class AppointmentNew extends Component{
 				store.service_type_list = resData.map(item => {
 					return {
 						label: item.category,
-						value: item.id
+						value: item.category
 					}
 				});
 			})
@@ -128,7 +128,7 @@ class AppointmentNew extends Component{
 		let item = [];
 		let showMoney = false;
 		Array.from(store.origin_service_type_list).forEach(type => {
-			if(type.id === value[0]){
+			if(type.category === value[0]){
 				if(type.money === 1){
 					showMoney = true;
 				}
@@ -162,7 +162,7 @@ class AppointmentNew extends Component{
 			axios.post('/api/v1/order/save', params)
 				.then(res => {
 					let resData = res.data;
-					if(resData.error_code === 0){
+					if(resData.error_code === 0 || resData.errorCode === 0){
 						history.push('/appointment/result');
 					}
 				})

@@ -8,16 +8,16 @@ import moment from 'moment';
 moment.locale('zh_cn');
 import axios from 'axios';
 import { SIZE, MALE, FEMALE} from "../../config/CONSTANT";
-import getWxToken from '../../helpers/fresh_token';
 @observer
 class AppointmentList extends Component{
-	dataSource = new ListView.DataSource({
-		rowHasChanged: (row1, row2) => row1 !== row2,
-	});
+	constructor(props){
+		super(props);
+		store.dataSource = new ListView.DataSource({
+			rowHasChanged: (row1, row2) => row1 !== row2,
+		});
+	}
 	render(){
-		let { date, visible, appointment_list } = store;
-		let appointmentList = Array.from(appointment_list);
-		this.dataSource = this.dataSource.cloneWithRows(appointmentList);
+		let { date, visible, dataSource } = store;
 		const separator = (sectionID, rowID) => (
 			<div
 				key={`${sectionID}-${rowID}`}
@@ -65,7 +65,7 @@ class AppointmentList extends Component{
 					onOk={this.setDate}
 				/>
 				<ListView
-					dataSource={this.dataSource}
+					dataSource={dataSource}
 					renderSectionHeader={() => <span>预约列表</span>}
 					renderRow={row}
 					renderSeparator={separator}
@@ -83,7 +83,6 @@ class AppointmentList extends Component{
 	}
 	getAppointmentList = (page = 1) => {
 		let { day } = store;
-		getWxToken();
 		axios.get('/api/v1/orders/wx', {
 			params: {
 				page,
@@ -94,34 +93,15 @@ class AppointmentList extends Component{
 			.then(res => {
 				let resData = res.data;
 				let appointmentList = Array.from(store.appointment_list);
-				let orders = [{
-					"name": "朱明良",
-					"phone": "18956225230",
-					"identity": "34262619901001****",
-					"sex": 1,
-					"service": "ATM机",
-					"service_item": "ATM机吞卡",
-					"day": "2018-06-02 00:00:00",
-					"state": "1",
-					"money": 2
-				}, {
-					"name": "朱明良",
-					"phone": "18956225230",
-					"identity": "34262619901001****",
-					"sex": 1,
-					"service": "ATM机",
-					"service_item": "ATM机吞卡",
-					"day": "2018-06-02 10:00:00",
-					"state": "1",
-					"money": 2
-				}];
+				let concatResult;
 				if(resData.user_grade === 1){
-					store.appointment_list = appointmentList.concat(orders);
+					concatResult = appointmentList.concat(resData.orders);
 				}else{
-					store.appointment_list = resData.data;
+					concatResult = appointmentList.concat(resData.data);
 					store.total = resData.total;
 				}
-
+				store.appointment_list = concatResult;
+				store.dataSource = store.dataSource.cloneWithRows(concatResult);
 			})
 			.catch(res => {
 
