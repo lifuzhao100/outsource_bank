@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import routes from '../routes_mobile';
 import handleRoutes from '../helpers/handle_routes';
 const routeArr = handleRoutes(routes);
-import freshToken from '../helpers/fresh_token';
+import { getToken } from '../helpers/fresh_token';
 class App extends Component{
 	render(){
 		return (
@@ -13,7 +13,7 @@ class App extends Component{
 		)
 	}
 	componentDidMount(){
-		freshToken();
+		getToken();
 	}
 }
 export default App;
