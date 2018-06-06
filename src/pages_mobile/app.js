@@ -18,10 +18,11 @@ class App extends Component{
 		let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 
 		let url2 = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf4b7d664b2461f4b&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
-		let { location } = history;
-		for(let key in location){
-			alert(key + ':' +location[key]);
-		}
+		// let { location } = history;
+		// for(let key in location){
+		// 	alert(key + ':' +location[key]);
+		// }
+		alert(location.href);
 		window.location = url2;
 		return ;
 		if(location.search){
