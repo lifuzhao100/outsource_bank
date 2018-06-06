@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../history';
 let getCode = () => {
 	let reg = new RegExp("(^|&)code=([^&]*)(&|$)");
 	let result = location.search.substr(1).match(reg);
@@ -7,7 +8,8 @@ let getCode = () => {
 };
 let wxToken = (notForce, code) => {
 	// let origin = encodeURIComponent(location.href);
-	let origin = encodeURIComponent('http://bank.mengant.cn/index.html#/appointment/new');
+	let { location: { pathname }} = history;
+	let origin = encodeURIComponent(`http://bank.mengant.cn/index.html#${pathname}`);
 	let appid = 'wxf4b7d664b2461f4b';
 	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect;`
 	//notForce true,上传code供后端获取用户信息 false,强制重新获取code
@@ -20,7 +22,7 @@ let wxToken = (notForce, code) => {
 			}
 		})
 			.then(res => {
-				alert(res.data);
+				// alert(res.data);
 			})
 	}
 };
