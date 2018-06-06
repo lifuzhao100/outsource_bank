@@ -36,7 +36,7 @@ class AppointmentList extends Component{
 		);
 		const row = (rowData, sectionID, rowID) => {
 			let btns = [];
-			switch (rowData.state){
+			switch (parseInt(rowData.state)){
 				case 1:
 					if(user_type === 'admin'){
 						btns = [
@@ -137,7 +137,7 @@ class AppointmentList extends Component{
 					appointmentList = [];
 				}
 				let concatResult;
-				if(resData.user_grade === 1){//用户
+				if(resData.user_grade == 1){//用户
 					concatResult = appointmentList.concat(resData.orders);
 					store.user_type = 'user';
 				}else{//管理员
