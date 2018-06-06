@@ -8,7 +8,7 @@ import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
 import store from '../../stores/index_index';
 import axios from 'axios';
-import getWxToken from '../../helpers/get_wx_token';
+import getWxToken from '../../helpers/fresh_token';
 @observer
 class Index extends Component{
 	render(){

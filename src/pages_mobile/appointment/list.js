@@ -8,7 +8,7 @@ import moment from 'moment';
 moment.locale('zh_cn');
 import axios from 'axios';
 import { SIZE, MALE, FEMALE} from "../../config/CONSTANT";
-import getWxToken from '../../helpers/get_wx_token';
+import getWxToken from '../../helpers/fresh_token';
 @observer
 class AppointmentList extends Component{
 	dataSource = new ListView.DataSource({
