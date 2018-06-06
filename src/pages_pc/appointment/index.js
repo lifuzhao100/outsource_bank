@@ -10,6 +10,8 @@ import multipleClass from '../../helpers/multiple_class';
 import getToken from '../../helpers/get_token';
 import axios from 'axios';
 import { observer } from 'mobx-react';
+import { SIZE } from "../../config/CONSTANT";
+
 @observer
 class Appointment extends Component{
 	constructor(props){
@@ -20,27 +22,34 @@ class Appointment extends Component{
 		];
 	}
 	render(){
-		let { total, size, data, key, bank_id, dates, bank_list } = store;
-		let defaultDates = Array.from(dates);
-		let dataSource = Array.from(data);
+		let { total, bank_list, appointment_list } = store;
 		let bankList = Array.from(bank_list);
+		let dataSource= Array.from(appointment_list);
+		let { getFieldDecorator } = this.props.form;
 		return (
 			<React.Fragment>
 				<Form layout='inline' className={multipleClass(styles, 'flex space-between select-bar')}>
-					<Form.Item>
-						<Select className={multipleClass(styles, 'select')} defaultValue={bank_id} onChange={this.changeBank}>
+					<Form.Item>{getFieldDecorator('bank_id', {
+						initialValue: '0'
+					})(
+						<Select className={multipleClass(styles, 'select')} onChange={() => this.getAppointmentList()}>
 							<Option value='0'>全部银行</Option>
 							{bankList.map(bank => <Option value={'' + bank.id} key={'' + bank.id}>{bank.name}</Option>)}
 						</Select>
-					</Form.Item>
-					<Form.Item>
-						<Search placeholder='请输入搜索内容' defaultValue={key} onSearch={this.changeKey}/>
-					</Form.Item>
-					<Form.Item>
-						<RangePicker allowClear={false} defaultValue={defaultDates} onChange={this.changeTime}/>
-					</Form.Item>
+					)}</Form.Item>
+					<Form.Item>{getFieldDecorator('key', {
+						initialValue: ''
+					})(
+						<Search placeholder='请输入搜索内容' onPressEnter={() => this.getAppointmentList()}/>
+					)}</Form.Item>
+					<Form.Item>{getFieldDecorator('dates', {
+						initialValue: [moment(), moment()],
+						trigger: 'onCalendarChange'
+					})(
+						<RangePicker allowClear={false} onChange={() => this.getAppointmentList()}/>
+					)}</Form.Item>
 				</Form>
-				<Table columns={this.columns} dataSource={dataSource} pagination={total > size ? {onChange: this.changePage} : false}/>
+				<Table columns={this.columns} dataSource={dataSource} pagination={total > SIZE ? { total, onChange: page => this.getAppointmentList(page)} : false}/>
 			</React.Fragment>
 		)
 	}
@@ -48,30 +57,32 @@ class Appointment extends Component{
 		this.getBankList();
 		this.getAppointmentList();
 	}
-	getAppointmentList = () => {
-		let { time_begin, time_end, size, page, bank_id, key } = store;
+	getAppointmentList = (page = 1) => {
+		let {bank_id, key, dates} = this.props.form.getFieldsValue();
+		let [time_begin, time_end] = dates;
 		let token = getToken();
 		if(token){
 			axios.get('/api/v1/orders/cms', {
 				params: {
-					token,
-					time_begin,
-					time_end,
-					key,
 					bank_id,
-					size,
-					page
+					key,
+					time_begin: time_begin.format('YYYY-MM-DD'),
+					time_end: time_end.format('YYYY-MM-DD'),
+					page: page,
+					size: SIZE
+				}
+			}, {
+				headers: {
+					token
 				}
 			})
 				.then(res => {
 					let resData = res.data;
 					let { data, total } = resData;
-					store.setData(data);
+					store.appointment_list = data;
 					store.total = total;
 				})
-				.catch(res => {
-
-				})
+				.catch(res => {})
 		}
 	};
 	getBankList = () => {
@@ -86,22 +97,6 @@ class Appointment extends Component{
 				let { data } = resData;
 				store.bank_list = data;
 			})
-	};
-	changeBank = (id) => {
-		store.bank_id = id;
-		this.getAppointmentList();
-	};
-	changeKey = (key) => {
-		store.key = key;
-		this.getAppointmentList();
-	};
-	changeTime = (dates) => {
-		store.dates = dates;
-		this.getAppointmentList();
-	};
-	changePage = (page) => {
-		store.page = page;
-		this.getAppointmentList();
 	};
 	columns = [{
 		title: '银行名称',

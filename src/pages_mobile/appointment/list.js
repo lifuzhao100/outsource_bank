@@ -48,7 +48,7 @@ class AppointmentList extends Component{
 		return (
 			<div className='appointment_list'>
 				<div className={multipleClass(styles, 'home')}>
-					<Button inline={true} size='small'>首页</Button>
+					<Button inline={true} size='small' onClick={this.goIndex}>首页</Button>
 				</div>
 				<List style={{borderBottom:'none'}}>
 					<List.Item
@@ -83,7 +83,7 @@ class AppointmentList extends Component{
 	}
 	getAppointmentList = (page = 1) => {
 		let { day } = store;
-		getWxToken()
+		getWxToken();
 		axios.get('/api/v1/orders/wx', {
 			params: {
 				page,
@@ -126,6 +126,9 @@ class AppointmentList extends Component{
 			.catch(res => {
 
 			});
+	};
+	goIndex = () => {
+		this.props.history.push('/');
 	};
 	openDateModal = () => {
 		store.visible = true;

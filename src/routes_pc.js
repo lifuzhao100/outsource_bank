@@ -20,6 +20,11 @@ let routes = [{
 	path: '/bank/config',
 	component: () => import(/* webpackChunkName: "bank_config" */ './pages_pc/bank/config')
 }, {
+	title: '绑定管理员',
+	name: 'bank_bind',
+	path: '/bank/bind/:id',
+	component: () => import(/* webpackChunkName: "bank_bind" */ './pages_pc/bank/bind')
+},{
 	title: '服务配置',
 	name: 'service_config',
 	path: '/service/config',

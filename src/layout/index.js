@@ -7,6 +7,7 @@ import multipleClass from '../helpers/multiple_class';
 import SiderTree from '../components/sider_tree';
 import { observer } from 'mobx-react';
 import globalStore from '../stores/global';
+import history from '../history';
 @observer
 class BasicLayout extends Component{
 	state = {
@@ -21,11 +22,11 @@ class BasicLayout extends Component{
 				<Header className={multipleClass(styles, 'no-padding')}>
 					<div className={multipleClass(styles, 'header')}>
 						<div style={{float: 'left'}}>
-							<Button>预约管理</Button>
+							<Button onClick={() => history.push('/')}>预约管理</Button>
 						</div>
 						<div className={multipleClass(styles, 'header-right')}>
 							<Popconfirm placement='bottomRight' onConfirm={this.doLogout} cancelText='取消' okText='确认' title='是否确认退出登录？'>
-								<Avatar src='http://www.iconpng.com/png/winter_lollipop/heart.png'/>
+								{/*<Avatar src='http://www.iconpng.com/png/winter_lollipop/heart.png'/>*/}
 								<span className={multipleClass(styles, 'user-name')}>{username}</span>
 							</Popconfirm>
 						</div>

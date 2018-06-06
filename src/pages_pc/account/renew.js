@@ -104,7 +104,7 @@ class Renew extends Component{
 			axios.post('/api/v1/token/update',{
 				old_pwd,
 				new_pwd
-			})
+			}, {headers:{token}})
 				.then(res => {
 					let resData = res.data;
 					message.success('修改密码成功，2秒后将退出重新登陆');
