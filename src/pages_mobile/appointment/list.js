@@ -21,9 +21,10 @@ class AppointmentList extends Component{
 		if(day){
 			store.date = new Date(day);
 		}
+		this.page = 1;
 	}
 	render(){
-		let { date, visible, dataSource, user_type } = store;
+		let { date, visible, dataSource, user_type, loading } = store;
 		const separator = (sectionID, rowID) => (
 			<div
 				key={`${sectionID}-${rowID}`}
@@ -102,16 +103,19 @@ class AppointmentList extends Component{
 					renderSectionHeader={() => <span>预约列表</span>}
 					renderRow={row}
 					renderSeparator={separator}
+					renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+						{loading ? 'Loading...' : 'Loaded'}
+					</div>)}
 					pageSize={4}
 					useBodyScroll
-					style={{height: 600}}
+					onEndReached={this.loadMore}
 				>
 				</ListView>
 			</div>
 		)
 	}
 	componentDidMount(){
-		this.getAppointmentList();
+		this.getAppointmentList(this.page);
 	}
 	getAppointmentList = (page = 1) => {
 		let { day } = store;
@@ -123,6 +127,7 @@ class AppointmentList extends Component{
 			}
 		})
 			.then(res => {
+				store.loading = false;
 				let resData = res.data;
 				let appointmentList = Array.from(store.appointment_list);
 				if(page === 1){//第一页重新渲染
@@ -141,7 +146,7 @@ class AppointmentList extends Component{
 				store.dataSource = store.dataSource.cloneWithRows(concatResult);
 			})
 			.catch(res => {
-
+				store.loading = false;
 			});
 	};
 	reject = (order_id) => {
@@ -177,6 +182,10 @@ class AppointmentList extends Component{
 			}
 		])
 	};
+	loadMore = () => {
+		store.loading = true;
+		this.getAppointmentList(++this.page);
+	};
 	handleAppointment = (order_id, state) => {
 		axios.post('/api/v1/order/handel', {
 			id: order_id,
@@ -185,7 +194,14 @@ class AppointmentList extends Component{
 			.then(res => {
 				let resData = res.data;
 				if(resData.error_code === 0 || resData.errorCode === 0){
-					this.get
+					let appointmentList = Array.from(store.appointment_list);
+					appointmentList.forEach(a => {
+						if(a.order_id === order_id){
+							a.state = state;
+						}
+					});
+					store.appointment_list = appointmentList;
+					store.dataSource = store.dataSource.cloneWithRows(appointmentList);
 				}
 			})
 	};

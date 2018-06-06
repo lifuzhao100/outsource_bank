@@ -6,6 +6,7 @@ class Store {
 	@observable appointment_list = [];
 	@observable dataSource ;
 	@observable user_type;
+	@observable loading = false;
 	@computed get day(){
 		return moment(this.date).format('YYYY-MM-DD');
 	}

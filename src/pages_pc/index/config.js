@@ -79,10 +79,12 @@ class AddIndex extends Component{
 			if(token){
 				store.modalLoading = true;
 				let params = {
-					logo: dealLogo,
 					url: url
 				};
 				if(!!selectItem.id){//修改
+					if(dealLogo){
+						params.logo = dealLogo;
+					}
 					params.id = selectItem.id;
 					axios.post('/api/v1/nav/update', params, {
 						headers: {
@@ -109,6 +111,7 @@ class AddIndex extends Component{
 							message.error(resData.msg);
 						});
 				}else{//新增
+					params.logo = dealLogo;
 					axios.post('/api/v1/nav/save', params, {
 						headers:{
 							token

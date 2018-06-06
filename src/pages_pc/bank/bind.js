@@ -77,12 +77,17 @@ class BankBind extends Component{
 		dataIndex: 'nickname'
 	}, {
 		title: '真实姓名',
-		render: (tex, record) => <Input style={{width: 150}} placeholder='管理员真实姓名' onChange={(e) => record.name = e.target.value}/>
+		render: (tex, record) => {
+			let bind = record.bind || [];
+			let bindItem = Array.from(bind)[0] || {};
+			return !!bindItem.user_name ? bindItem.user_name : <Input style={{width: 150}} placeholder='管理员真实姓名' onChange={(e) => record.name = e.target.value}/>
+
+		}
 	},{
 		title: '操作',
 		dataIndex: 'openid',
 		key: 'openid',
-		render: (openid, record) => <a onClick={() => this.bindAdmin(openid, record)}>绑定</a>
+		render: (openid, record) => !record.bind || !record.bind.length ? <a onClick={() => this.bindAdmin(openid, record)}>绑定</a> : null
 	}]
 }
 export default BankBind;

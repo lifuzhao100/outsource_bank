@@ -58,14 +58,14 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'pc/index.html',
-			template: './index.html',
+			template: './index.mobile.html',
 			title: 'CMS',
 			inject: 'body',
 			chunks: ['pc/index']
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'mobile/index.html',
-			template: './index.html',
+			template: './index.mobile.html',
 			title: 'mobile',
 			inject: 'body',
 			chunks: ['mobile/index'],

@@ -114,15 +114,13 @@ module.exports = {
 		new webpack.HashedModuleIdsPlugin(),
 		new HtmlWebpackPlugin({
 			filename: 'pc/index.html',
-			template: './index.html',
-			title: 'CMS',
+			template: './index.pc.html',
 			inject: 'body',
 			chunks: ['vendor','pc/index']
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'index.html',
-			template: './index.html',
-			title: 'mobile',
+			template: './index.mobile.html',
 			inject: 'body',
 			chunks: ['vendor','mobile/index'],
 		})
