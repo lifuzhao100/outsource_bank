@@ -13,7 +13,9 @@ class App extends Component{
 		)
 	}
 	componentDidMount(){
-		getToken();
+		if(location.host !== 'localhost:7000'){
+			getToken();
+		}
 	}
 }
 export default App;

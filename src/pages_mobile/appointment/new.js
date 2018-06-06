@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../../less/appointment_new.less';
 import multipleClass from '../../helpers/multiple_class';
-import { List, InputItem, Picker, DatePicker, Button, WingBlank } from 'antd-mobile';
+import { List, InputItem, Picker, DatePicker, Button, WingBlank, Toast } from 'antd-mobile';
 import { observer } from 'mobx-react';
 import store from '../../stores/appointment_new';
 import getMinMaxDateTime from '../../helpers/get_min_max_date_time';
@@ -159,15 +159,17 @@ class AppointmentNew extends Component{
 			if(showMoney) {
 				params.money = money;
 			}
+			Toast.loading('提交中，请稍后...', 30);
 			axios.post('/api/v1/order/save', params)
 				.then(res => {
+					Toast.hide();
 					let resData = res.data;
 					if(resData.error_code === 0 || resData.errorCode === 0){
 						history.push('/appointment/result');
 					}
 				})
 				.catch(res => {
-
+					Toast.hide();
 				})
 		}
 	}
