@@ -4,6 +4,7 @@ import routes from '../routes_pc';
 import handleRoutes from '../helpers/handle_routes';
 const routeArr = handleRoutes(routes);
 import BasicLayout from '../layout/index';
+
 import { Redirect } from 'react-router';
 class App extends Component{
 	render(){

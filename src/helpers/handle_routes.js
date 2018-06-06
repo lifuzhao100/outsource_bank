@@ -5,7 +5,7 @@ let handleRoutes = (routes) => {
 		let newRoute = {
 			...route
 		};
-		newRoute.Component = (props) => <Wrapper component={route.component} {...props}/>;
+		newRoute.Component = (props) => <Wrapper component={route.component} title={route.title} {...props}/>;
 		return newRoute;
 	})
 };

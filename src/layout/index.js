@@ -8,6 +8,7 @@ import SiderTree from '../components/sider_tree';
 import { observer } from 'mobx-react';
 import globalStore from '../stores/global';
 import history from '../history';
+import DocumentTitle from 'react-document-title';
 @observer
 class BasicLayout extends Component{
 	state = {

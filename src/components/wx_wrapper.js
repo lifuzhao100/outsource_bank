@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Toast } from 'antd-mobile';
+import DocumentTitle from 'react-document-title';
 class Wrapper extends Component{
 	state = {
 		Comp: null
@@ -8,7 +9,7 @@ class Wrapper extends Component{
 		let { Comp } = this.state;
 		let props = this.props;
 		if(!Comp) return null;
-		return <Comp {...props}/>
+		return <DocumentTitle title={props.title}><Comp {...props}/></DocumentTitle>;
 	}
 	componentDidMount(){
 		let { component } = this.props;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Spin } from 'antd';
+import DocumentTitle from 'react-document-title';
 class Wrapper extends Component{
 	state = {
 		Comp: null
@@ -7,8 +8,13 @@ class Wrapper extends Component{
 	render(){
 		let { Comp } = this.state;
 		let props = this.props;
+		console.log(props);
 		if(!Comp) return <div style={{width: '100%', height: '100%', textAlign: 'center'}}><Spin/></div>;
-		return <Comp {...props}/>
+		return (
+			<DocumentTitle title={props.title}>
+				<Comp {...props}/>
+			</DocumentTitle>
+		)
 	}
 	componentDidMount(){
 		let { component } = this.props;
