@@ -14,7 +14,7 @@ class App extends Component{
 	}
 	componentDidMount(){
 		let appid = 'wxf4b7d664b2461f4b';
-		let redirect_uri = encodeURIComponent('http://bank.mengant.cn/index.html#/');
+		let redirect_uri = encodeURIComponent('http://bank.mengant.cn/index.html#/appointment/list');
 		let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 
 		let url2 = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf4b7d664b2461f4b&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
