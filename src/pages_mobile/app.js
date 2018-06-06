@@ -17,8 +17,10 @@ class App extends Component{
 		let redirect_uri = 'http://bank.mengant.cn/index.html';
 		let url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 		let { location } = history;
-		alert(location);
-		location.href = url;
+		for(let key in location){
+			alert(key + ':' +location[key]);
+		}
+		window.location = url;
 		return ;
 		if(location.search){
 			console.log(location);
