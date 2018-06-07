@@ -15,7 +15,7 @@ let files = {};
 app.use(staticCache(join(__dirname, 'build'), {
 	maxAge: 365 * 24 * 60 * 60,
 	gzip: true,
-	prefix: '/build'
+	prefix: '/build/'
 }, files));
 for (let file in files){
 	if(/\.html$/.test(file)){
