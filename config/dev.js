@@ -13,7 +13,7 @@ module.exports = {
 		filename: '[name].js',
 		chunkFilename: '[name].js',
 		path: resolve(root, 'build'),
-		publicPath: '/'
+		publicPath: '/build/'
 	},
 	module: {
 		rules: [{
@@ -58,13 +58,13 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'pc/index.html',
-			template: './index.mobile.html',
+			template: './index.pc.html',
 			title: 'CMS',
 			inject: 'body',
 			chunks: ['pc/index']
 		}),
 		new HtmlWebpackPlugin({
-			filename: 'mobile/index.html',
+			filename: 'index.html',
 			template: './index.mobile.html',
 			title: 'mobile',
 			inject: 'body',

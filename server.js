@@ -12,6 +12,10 @@ const app = new Koa();
 // 	flush: require('zlib').Z_SYNC_FLUSH
 // }))
 let files = {};
+app.use((ctx,next) => {
+	console.log(ctx.request.path);
+	next();
+});
 app.use(staticCache(join(__dirname, 'build'), {
 	maxAge: 365 * 24 * 60 * 60,
 	gzip: true,
