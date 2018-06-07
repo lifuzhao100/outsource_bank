@@ -1,5 +1,6 @@
 import axios from 'axios';
 import getParam from './get_param';
+let promise = null;
 let wxToken = (notForce, code) => {
 	let origin = encodeURIComponent(location.href.split('#')[0]);
 	let appid = 'wxf4b7d664b2461f4b';
@@ -8,30 +9,34 @@ let wxToken = (notForce, code) => {
 	if(!notForce){
 		window.location = requestURL;
 	}else{
-		return new Promise((resolve, reject) =>{
+		if(promise) return promise;
+		promise = new Promise((resolve, reject) =>{
 			axios.get('/api/v1/token/user', {
 				params: {
 					code
 				}
 			})
 				.then(res => {
+					promise = null;
 					resolve(res);
 				})
 				.catch(res => {
+					promise = null;
 					reject(res);
 				})
-		})
+		});
+		return promise;
 	}
 };
 
 let getWxToken = () => {
 	//如果有code则上传
 	let code = getParam().code;
-	wxToken(!!code, code);
+	return wxToken(!!code, code);
 };
 let refreshWxToken = () => {
 	//强制重新获取code
-	wxToken(false);
+	return wxToken(false);
 };
 export {
 	getWxToken,
