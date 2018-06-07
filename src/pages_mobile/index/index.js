@@ -95,7 +95,7 @@ class Index extends Component{
 			mapTypeId: qq.maps.MapTypeId.ROADMAP
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
-		let markers ;
+		let markers = [];
 		var latLngBounds = new qq.maps.LatLngBounds();
 		//调用Poi检索类
 		let searchService = new qq.maps.SearchService({
