@@ -92,7 +92,24 @@ class Index extends Component{
 		let myOptions = {
 			zoom: 13,
 			center: myLatlng,
-			mapTypeId: qq.maps.MapTypeId.ROADMAP
+			//如果为 true，在初始化地图时不会清除地图容器内的内容
+			noClear: true,
+			mapTypeId: qq.maps.MapTypeId.ROADMAP,
+			//若为false则禁止拖拽
+			draggable: false,
+			//若为false则禁止滑轮滚动缩放
+			scrollwheel: false,
+			//若为true则禁止双击放大
+			disableDoubleClickZoom: true,
+			//若为false则禁止键盘控制地图
+			keyboardShortcuts: false,
+			//地图平移控件，若为false则不显示平移控件
+			panControl: true,
+			//地图缩放控件，若为false则不显示缩放控件
+			zoomControl: false,
+
+			//地图比例尺控件，若为false则不显示比例尺控件
+			scaleControl: false,
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
 		let markers = [];
@@ -108,15 +125,13 @@ class Index extends Component{
 						map:map,
 						position: poi.latLng
 					});
-
 					marker.setTitle(i+1);
-
 					markers.push(marker);
 				}
 				map.fitBounds(latLngBounds);
 			}
 		});
-		searchService.setPageCapacity(20);
+		searchService.setPageCapacity(50);
 		searchService.searchNearBy('银行', myLatlng, 20000000000);
 	};
 	getIndexList = () => {
@@ -126,6 +141,7 @@ class Index extends Component{
 				store.index_list = resData;
 			})
 			.catch(res => {
+				console.log(res);
 				let resData = res.data;
 				if(resData.error_code === 10001 || resData.errorCode === 10001){
 					let promise = getWxToken();

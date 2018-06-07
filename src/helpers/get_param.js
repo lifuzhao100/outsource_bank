@@ -1,7 +1,7 @@
 let getParam = () => {
 	let search = location.href.split('?')[1];
-	search = search.split('#')[0];//去除hash的干扰
 	if(search){
+		search = search.split('#')[0];//去除hash的干扰
 		let paramsArr = search.split('&');
 		let paramsObj = {};
 		paramsArr.forEach(p => {
