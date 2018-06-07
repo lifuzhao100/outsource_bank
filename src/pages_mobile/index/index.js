@@ -96,7 +96,7 @@ class Index extends Component{
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
 		let markers = [];
-		var latLngBounds = new qq.maps.LatLngBounds();
+		let latLngBounds = new qq.maps.LatLngBounds();
 		//调用Poi检索类
 		let searchService = new qq.maps.SearchService({
 			complete : function(results){
@@ -117,7 +117,7 @@ class Index extends Component{
 			}
 		});
 		searchService.setPageCapacity(5);
-		searchService.searchNearBy('银行', myLatlng, 2000);
+		searchService.search('银行');
 	};
 	getIndexList = () => {
 		axios.get('/api/v1/wx/navs')
