@@ -113,7 +113,7 @@ class Index extends Component{
 
 					markers.push(marker);
 				}
-				map.fitBounds(latlngBounds);
+				map.fitBounds(latLngBounds);
 			}
 		});
 		searchService.setPageCapacity(5);
