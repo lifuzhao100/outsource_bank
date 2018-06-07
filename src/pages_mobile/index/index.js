@@ -117,7 +117,7 @@ class Index extends Component{
 			}
 		});
 		searchService.setPageCapacity(5);
-		searchService.search('银行');
+		searchService.searchNearBy('银行', myLatlng, 20000000000);
 	};
 	getIndexList = () => {
 		axios.get('/api/v1/wx/navs')
