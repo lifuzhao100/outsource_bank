@@ -116,7 +116,7 @@ class Index extends Component{
 				map.fitBounds(latLngBounds);
 			}
 		});
-		searchService.setPageCapacity(5);
+		searchService.setPageCapacity(20);
 		searchService.searchNearBy('银行', myLatlng, 20000000000);
 	};
 	getIndexList = () => {
