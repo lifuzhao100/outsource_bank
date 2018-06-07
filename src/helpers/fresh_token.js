@@ -3,13 +3,18 @@ import getParam from './get_param';
 import history from '../history';
 let promise = null;
 
-let wxToken = (notForce, code) => {
+let wxToken = (notForce, code, state) => {
 	let { location: {pathname} } = history;
 	let removeHash = location.href.split('#')[0];
 	let removeParams = removeHash.split('?')[0];
 	let origin = encodeURIComponent(removeParams + '#' + pathname);
 	let appid = 'wxf4b7d664b2461f4b';
-	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect;`
+	if(state instanceof Array){
+		state = state.map(s => 'state=' + s).join('#');
+	}else{
+		state = 'state=' + state;
+	}
+	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&${state}#wechat_redirect`;
 	//notForce true,上传code供后端获取用户信息 false,强制重新获取code
 	if(!notForce){
 		window.location = requestURL;
@@ -34,10 +39,10 @@ let wxToken = (notForce, code) => {
 	}
 };
 
-let getWxToken = () => {
+let getWxToken = (state = '') => {
 	//如果有code则上传
 	let code = getParam().code;
-	return wxToken(!!code, code);
+	return wxToken(!!code, code, state);
 };
 let refreshWxToken = () => {
 	//强制重新获取code

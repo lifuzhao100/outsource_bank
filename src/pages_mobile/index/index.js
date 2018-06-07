@@ -35,8 +35,10 @@ class Index extends Component{
 						/>
 					</section>
 					<div className={multipleClass(styles,'map-container')}>
-						<div id='container' className={multipleClass(styles, 'container')}>
-							{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
+						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
+							<div id='container' className={multipleClass(styles, 'container')}>
+								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
+							</div>
 						</div>
 					</div>
 				</WingBlank>
@@ -130,8 +132,8 @@ class Index extends Component{
 				map.fitBounds(latLngBounds);
 			}
 		});
-		searchService.setPageCapacity(50);
-		searchService.searchNearBy('银行', myLatlng, 20000000000);
+		searchService.setPageCapacity(20);
+		searchService.searchNearBy('银行', myLatlng, 2000);
 	};
 	getIndexList = () => {
 		axios.get('/api/v1/wx/navs')

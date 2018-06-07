@@ -27,6 +27,12 @@ class AppointmentList extends Component{
 		}else{
 			store.grade = '';
 		}
+		if(param.state){//根据下面定义的格式，取出数据
+			let state = decodeURIComponent(param.state);
+			let data = state.split('-');
+			store.day = data[0];
+			store.grade = data[1];
+		}
 		this.page = 1;
 	}
 	render(){
@@ -161,13 +167,18 @@ class AppointmentList extends Component{
 			.catch(res => {
 				store.loading = false;
 				let resData = res.data;
+				let param = getParam();
+				let state = '';//在授权后依然能保留的数据
+				if(param.day && param.grade){
+					state = param.day + '-' + param.grade;
+				}
 				if (!resData) {
-					let promise = getWxToken();
+					let promise = getWxToken(state);
 					promise.then(res => {
 						this.getAppointmentList();
 					})
 				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
-					let promise = getWxToken();
+					let promise = getWxToken(state);
 					promise.then(res => {
 						this.getAppointmentList();
 					})
