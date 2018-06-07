@@ -104,7 +104,7 @@ class Index extends Component{
 			//若为false则禁止键盘控制地图
 			keyboardShortcuts: false,
 			//地图平移控件，若为false则不显示平移控件
-			panControl: true,
+			panControl: false,
 			//地图缩放控件，若为false则不显示缩放控件
 			zoomControl: false,
 
@@ -141,7 +141,7 @@ class Index extends Component{
 				store.index_list = resData;
 			})
 			.catch(res => {
-				console.log(res);
+				console.log(res.message);
 				let resData = res.data;
 				if(resData.error_code === 10001 || resData.errorCode === 10001){
 					let promise = getWxToken();
