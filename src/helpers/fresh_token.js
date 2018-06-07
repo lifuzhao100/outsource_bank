@@ -9,12 +9,8 @@ let wxToken = (notForce, code, state) => {
 	let removeParams = removeHash.split('?')[0];
 	let origin = encodeURIComponent(removeParams + '#' + pathname);
 	let appid = 'wxf4b7d664b2461f4b';
-	if(state instanceof Array){
-		state = state.map(s => 'state=' + s).join('#');
-	}else{
-		state = 'state=' + state;
-	}
-	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&${state}#wechat_redirect`;
+	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&$state=${state}#wechat_redirect`;
+	alert(requestURL);
 	//notForce true,上传code供后端获取用户信息 false,强制重新获取code
 	if(!notForce){
 		window.location = requestURL;
