@@ -90,11 +90,34 @@ class Index extends Component{
 		mapContainer.style.height = '220px';
 		let myLatlng = new qq.maps.LatLng(latitude, longitude);
 		let myOptions = {
-			zoom: 8,
+			zoom: 13,
 			center: myLatlng,
 			mapTypeId: qq.maps.MapTypeId.ROADMAP
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
+		let markers ;
+		var latLngBounds = new qq.maps.LatLngBounds();
+		//调用Poi检索类
+		let searchService = new qq.maps.SearchService({
+			complete : function(results){
+				let pois = results.detail.pois;
+				for(let i = 0,l = pois.length;i < l; i++){
+					let poi = pois[i];
+					latLngBounds.extend(poi.latLng);
+					let marker = new qq.maps.Marker({
+						map:map,
+						position: poi.latLng
+					});
+
+					marker.setTitle(i+1);
+
+					markers.push(marker);
+				}
+				map.fitBounds(latlngBounds);
+			}
+		});
+		searchService.setPageCapacity(5);
+		searchService.searchNearBy('银行', myLatlng, 200);
 	};
 	getIndexList = () => {
 		axios.get('/api/v1/wx/navs')
