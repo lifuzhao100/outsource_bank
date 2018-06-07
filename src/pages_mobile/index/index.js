@@ -2,28 +2,12 @@ import React, { Component } from 'react';
 import { WingBlank, Grid } from 'antd-mobile';
 import banner from '../../imgs/banner.png';
 import head from '../../imgs/head.png';
-import bottom from '../../imgs/bottom.png';
 import styles from '../../less/index.mobile.less';
 import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
 import store from '../../stores/index_index';
 import axios from 'axios';
 import { getWxToken } from '../../helpers/fresh_token';
-let getUserLocation = () => {
-	axios.get('/api/v1/location')
-		.then(res => {
-			let {appId, timestamp, nonceStr, signature} = res.data;
-			wx.config({
-				debug: true,
-				appId,
-				timestamp,
-				nonceStr,
-				signature,
-				jsApiList: ['getLocation']
-			});
-		});
-};
-
 @observer
 class Index extends Component{
 	render(){
@@ -68,7 +52,12 @@ class Index extends Component{
 			})
 			.then(res => {
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getUserLocation();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
 					let promise = getWxToken();
 					promise.then(res => {
 						this.getUserLocation();
@@ -141,9 +130,13 @@ class Index extends Component{
 				store.index_list = resData;
 			})
 			.catch(res => {
-				console.log(res.message);
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getIndexList();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
 					let promise = getWxToken();
 					promise.then(res => {
 						this.getIndexList();

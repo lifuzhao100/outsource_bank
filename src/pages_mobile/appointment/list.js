@@ -152,9 +152,14 @@ class AppointmentList extends Component{
 			.catch(res => {
 				store.loading = false;
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
 					let promise = getWxToken();
-					promise.then(resolve => {
+					promise.then(res => {
+						this.getAppointmentList();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
+					let promise = getWxToken();
+					promise.then(res => {
 						this.getAppointmentList();
 					})
 				}
@@ -217,10 +222,15 @@ class AppointmentList extends Component{
 			})
 			.catch(res => {
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
 					let promise = getWxToken();
 					promise.then(res => {
-						this.getAppointmentList();
+						//this.getUserLocation();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
+					let promise = getWxToken();
+					promise.then(res => {
+						//this.getUserLocation();
 					})
 				}
 			})

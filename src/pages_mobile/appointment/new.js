@@ -96,9 +96,14 @@ class AppointmentNew extends Component{
 			})
 			.catch(res => {
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
 					let promise = getWxToken();
-					promise.then(resolve => {
+					promise.then(res => {
+						this.getServiceList();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
+					let promise = getWxToken();
+					promise.then(res => {
 						this.getServiceList();
 					})
 				}
@@ -118,9 +123,14 @@ class AppointmentNew extends Component{
 			})
 			.catch(res => {
 				let resData = res.data;
-				if(resData.error_code === 10001 || resData.errorCode === 10001){
+				if (!resData) {
 					let promise = getWxToken();
-					promise.then(resolve => {
+					promise.then(res => {
+						this.getBankList();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
+					let promise = getWxToken();
+					promise.then(res => {
 						this.getBankList();
 					})
 				}
