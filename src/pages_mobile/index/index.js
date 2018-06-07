@@ -49,9 +49,7 @@ class Index extends Component{
 						/>
 					</section>
 					<div className={multipleClass(styles,'map-container')}>
-						<div id='container' >
-							<img src={bottom} className={multipleClass(styles, 'img')}/>
-						</div>
+						<div id='container' className={multipleClass(styles, 'container')}></div>
 					</div>
 				</WingBlank>
 			</div>
@@ -64,7 +62,9 @@ class Index extends Component{
 	getUserLocation = () => {
 		axios.get('/api/v1/location')
 			.then(res => {
-				console.log(res);
+				let latLng = res.data[0] || {};
+				store.latLng = latLng;
+				this.loadScript();
 			})
 			.then(res => {
 				let resData = res.data;
@@ -84,9 +84,11 @@ class Index extends Component{
 		document.body.appendChild(script);
 	};
 	initMap = () => {
+		let { latLng } = store;
+		let { latitude, longitude } = latLng;
 		let mapContainer = document.getElementById('container');
 		mapContainer.style.height = '220px';
-		let myLatlng = new qq.maps.LatLng(-34.397, 150.644);
+		let myLatlng = new qq.maps.LatLng(latitude, longitude);
 		let myOptions = {
 			zoom: 8,
 			center: myLatlng,
