@@ -39,6 +39,7 @@ let wxToken = (notForce, code, state) => {
 let getWxToken = (state = '') => {
 	//如果有code则上传
 	let code = getParam().code;
+	alert(code);
 	return wxToken(!!code, code, state);
 };
 let refreshWxToken = () => {
