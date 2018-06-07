@@ -12,9 +12,9 @@ const app = new Koa();
 // 	flush: require('zlib').Z_SYNC_FLUSH
 // }))
 let files = {};
-app.use((ctx,next) => {
+app.use(async (ctx,next) => {
 	console.log(ctx.request.path);
-	next();
+	await next();
 });
 app.use(staticCache(join(__dirname, 'build'), {
 	maxAge: 365 * 24 * 60 * 60,
