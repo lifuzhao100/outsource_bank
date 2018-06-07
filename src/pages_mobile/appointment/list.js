@@ -30,8 +30,6 @@ class AppointmentList extends Component{
 		if(param.state){//根据下面定义的格式，取出数据
 			let state = decodeURIComponent(param.state);
 			let data = state.split('*');
-			alert(data);
-			alert(data[0]);
 			store.date = new Date(data[0]);
 			store.grade = data[1];
 		}
@@ -172,7 +170,8 @@ class AppointmentList extends Component{
 				let param = getParam();
 				let state = '';//在授权后依然能保留的数据
 				if(param.day && param.grade){
-					state = param.day + '*' + param.grade;
+					let day = param.day.split(' ')[0];
+					state = day + '*' + param.grade;
 				}else if(param.state){
 					state = param.state;
 				}
