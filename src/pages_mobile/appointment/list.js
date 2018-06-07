@@ -20,7 +20,7 @@ class AppointmentList extends Component{
 		store.appointment_list = [];
 		let param = getParam();
 		if(param.day){
-			store.date = new Date(day);
+			store.date = new Date(param.day);
 		}
 		this.page = 1;
 	}
