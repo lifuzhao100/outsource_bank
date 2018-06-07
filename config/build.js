@@ -17,7 +17,7 @@ module.exports = {
 		filename: 'scripts/[id]_[hash].js',
 		chunkFilename: 'scripts/[id]_[chunkhash].js',
 		path: resolve(root, 'build'),
-		publicPath: '/'
+		publicPath: '/build'
 	},
 	devtool: 'source-map',
 	externals: /moment/,

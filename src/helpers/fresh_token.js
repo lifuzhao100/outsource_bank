@@ -27,16 +27,16 @@ let wxToken = (notForce, code) => {
 	}
 };
 
-let getToken = () => {
+let getWxToken = () => {
 	//如果有code则上传
 	let code = getCode();
 	wxToken(!!code, code);
 };
-let refreshToken = () => {
+let refreshWxToken = () => {
 	//强制重新获取code
 	wxToken(false);
 };
 export {
-	getToken,
-	refreshToken
+	getWxToken,
+	refreshWxToken
 };

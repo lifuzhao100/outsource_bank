@@ -9,6 +9,7 @@ moment.locale('zh_cn');
 import axios from 'axios';
 import { SIZE, MALE, FEMALE} from "../../config/CONSTANT";
 import getParam from "../../helpers/get_param";
+import { getWxToken } from "../../helpers/fresh_token";
 @observer
 class AppointmentList extends Component{
 	constructor(props){
@@ -205,6 +206,12 @@ class AppointmentList extends Component{
 					});
 					store.appointment_list = appointmentList;
 					store.dataSource = store.dataSource.cloneWithRows(appointmentList);
+				}
+			})
+			.catch(res => {
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					getWxToken();
 				}
 			})
 	};
