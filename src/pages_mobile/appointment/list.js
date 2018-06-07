@@ -31,7 +31,7 @@ class AppointmentList extends Component{
 			try{
 				let state = decodeURIComponent(param.state);
 				let data = state.split('*');
-				store.day = data[0];
+				store.date = data[0];
 				store.grade = data[1];
 			}catch(e){
 				alert(e);
