@@ -2,6 +2,7 @@ import { observable, computed } from 'mobx';
 import moment from 'moment';
 class Store {
 	@observable date = moment().toDate();
+	@observable grade;
 	@observable visible = false;
 	@observable appointment_list = [];
 	@observable dataSource ;

@@ -22,6 +22,11 @@ class AppointmentList extends Component{
 		if(param.day){
 			store.date = new Date(param.day);
 		}
+		if(param.grade){
+			store.grade = param.grade;
+		}else{
+			store.grade = '';
+		}
 		this.page = 1;
 	}
 	render(){
@@ -119,16 +124,20 @@ class AppointmentList extends Component{
 		this.getAppointmentList(this.page);
 	}
 	getAppointmentList = (page = 1) => {
-		let { day } = store;
+		let { day, grade } = store;
 		if(page === 1){
 			this.page = 1;//初始化
 		}
+		let params = {
+			page,
+			size: SIZE,
+			day: day
+		};
+		if(grade){
+			params.grade = grade;
+		}
 		axios.get('/api/v1/orders/wx', {
-			params: {
-				page,
-				size: SIZE,
-				day: day
-			}
+			params: params
 		})
 			.then(res => {
 				store.loading = false;
