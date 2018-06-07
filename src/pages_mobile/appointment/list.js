@@ -28,14 +28,10 @@ class AppointmentList extends Component{
 			store.grade = '';
 		}
 		if(param.state){//根据下面定义的格式，取出数据
-			try{
-				let state = decodeURIComponent(param.state);
-				let data = state.split('*');
-				store.date = data[0];
-				store.grade = data[1];
-			}catch(e){
-				alert(e);
-			}
+			let state = decodeURIComponent(param.state);
+			let data = state.split('*');
+			store.date = new Date(data[0]);
+			store.grade = data[1];
 		}
 		this.page = 1;
 	}
