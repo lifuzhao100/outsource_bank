@@ -7,6 +7,7 @@ import store from '../../stores/appointment_new';
 import getMinMaxDateTime from '../../helpers/get_min_max_date_time';
 import axios from 'axios';
 import history from '../../history';
+import {getWxToken} from "../../helpers/fresh_token";
 @observer
 class AppointmentNew extends Component{
 	render(){
@@ -94,7 +95,13 @@ class AppointmentNew extends Component{
 				});
 			})
 			.catch(res => {
-
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					let promise = getWxToken();
+					promise.then(resolve => {
+						this.getServiceList();
+					})
+				}
 			})
 	};
 	getBankList = () => {
@@ -108,6 +115,15 @@ class AppointmentNew extends Component{
 						value: r.id
 					}
 				})
+			})
+			.catch(res => {
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					let promise = getWxToken();
+					promise.then(resolve => {
+						this.getBankList();
+					})
+				}
 			})
 	};
 	sexList = [{

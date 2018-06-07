@@ -151,6 +151,13 @@ class AppointmentList extends Component{
 			})
 			.catch(res => {
 				store.loading = false;
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					let promise = getWxToken();
+					promise.then(resolve => {
+						this.getAppointmentList();
+					})
+				}
 			});
 	};
 	reject = (order_id) => {
@@ -211,7 +218,10 @@ class AppointmentList extends Component{
 			.catch(res => {
 				let resData = res.data;
 				if(resData.error_code === 10001 || resData.errorCode === 10001){
-					getWxToken();
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getAppointmentList();
+					})
 				}
 			})
 	};

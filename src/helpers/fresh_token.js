@@ -1,14 +1,6 @@
 import axios from 'axios';
-import history from '../history';
-let getCode = () => {
-	let reg = new RegExp("(^|&)code=([^&]*)(&|$)");
-	let result = location.search.substr(1).match(reg);
-	if (result != null) return decodeURIComponent(result[2]);
-	return null;
-};
+import getParam from './get_param';
 let wxToken = (notForce, code) => {
-	// let origin = encodeURIComponent(location.href);
-	// let { location: { pathname }} = history;
 	let origin = encodeURIComponent(location.href.split('#')[0]);
 	let appid = 'wxf4b7d664b2461f4b';
 	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect;`
@@ -16,20 +8,25 @@ let wxToken = (notForce, code) => {
 	if(!notForce){
 		window.location = requestURL;
 	}else{
-		axios.get('/api/v1/token/user', {
-			params: {
-				code
-			}
-		})
-			.then(res => {
-				// alert(res.data);
+		return new Promise((resolve, reject) =>{
+			axios.get('/api/v1/token/user', {
+				params: {
+					code
+				}
 			})
+				.then(res => {
+					resolve(res);
+				})
+				.catch(res => {
+					reject(res);
+				})
+		})
 	}
 };
 
 let getWxToken = () => {
 	//如果有code则上传
-	let code = getCode();
+	let code = getParam().code;
 	wxToken(!!code, code);
 };
 let refreshWxToken = () => {

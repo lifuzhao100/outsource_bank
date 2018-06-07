@@ -26,7 +26,6 @@ class AddIndex extends Component{
 		if(!logo){
 			logo = inits.logo;
 		}
-		console.log(logo);
 		return (
 			<Modal visible={visible} destroyOnClose={true} confirmLoading={modalLoading} onCancel={this.closeModal} cancelText='取消' onOk={this.confirm} okText='确认' title={<p className={multipleClass(modalStyle, 'modal-title')}>新建首页<small>上传首页图片和链接</small></p>}>
 				<Form>
@@ -78,7 +77,6 @@ class AddIndex extends Component{
 		if(!haveError(errors)){
 			let { url } = this.props.form.getFieldsValue();
 			let { logo, selectItem } = store;
-
 			let token = getToken();
 			if(token){
 				store.modalLoading = true;
@@ -105,6 +103,7 @@ class AddIndex extends Component{
 										item.logo = logo || store.selectItem.logo;
 										item.url = url
 									}
+									console.log(item);
 									return item;
 								});
 								store.indexList = list;

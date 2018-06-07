@@ -8,7 +8,22 @@ import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
 import store from '../../stores/index_index';
 import axios from 'axios';
-import getWxToken from '../../helpers/fresh_token';
+import { getWxToken } from '../../helpers/fresh_token';
+let getUserLocation = () => {
+	axios.get('/api/v1/location')
+		.then(res => {
+			let {appId, timestamp, nonceStr, signature} = res.data;
+			wx.config({
+				debug: true,
+				appId,
+				timestamp,
+				nonceStr,
+				signature,
+				jsApiList: ['getLocation']
+			});
+		});
+};
+
 @observer
 class Index extends Component{
 	render(){
@@ -44,32 +59,20 @@ class Index extends Component{
 	}
 	componentDidMount(){
 		this.getIndexList();
-		this.getUserLocation();
 	}
 	getUserLocation = () => {
 		axios.get('/api/v1/location')
 			.then(res => {
-				let { appId, timestamp, nonceStr, signature} = res.data;
-				wx.config({
-					debug: true,
-					appId,
-					timestamp,
-					nonceStr,
-					signature,
-					jsApiList: ['getLocation']
-				});
-				wx.ready(() => {
-					wx.getLocation({
-						type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-						success: function (res) {
-							var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-							var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-							var speed = res.speed; // 速度，以米/每秒计
-							var accuracy = res.accuracy; // 位置精度
-							alert(latitude, longitude);
-						}
-					});
-				})
+				console.log(res);
+			})
+			.then(res => {
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getUserLocation();
+					})
+				}
 			})
 	};
 	loadScript = () => {
@@ -97,7 +100,13 @@ class Index extends Component{
 				store.index_list = resData;
 			})
 			.catch(res => {
-
+				let resData = res.data;
+				if(resData.error_code === 10001 || resData.errorCode === 10001){
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getIndexList();
+					})
+				}
 			})
 	}
 }
