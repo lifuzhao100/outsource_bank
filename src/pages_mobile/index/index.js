@@ -8,13 +8,15 @@ import { observer } from 'mobx-react';
 import store from '../../stores/index_index';
 import axios from 'axios';
 import { getWxToken } from '../../helpers/fresh_token';
+import bottomImg from '../../imgs/bottom.png';
 @observer
 class Index extends Component{
 	render(){
+		let { locationFail } = store;
 		let list = Array.from(store.index_list);
 		return (
 			<div className={multipleClass(styles, 'index')}>
-				<WingBlank>
+				<WingBlank style={{boxShadow: '0 2px 8px rgba(0,0,0,.09)'}}>
 					<div>
 						<img src={banner} style={{width: '100%'}}/>
 					</div>
@@ -33,7 +35,9 @@ class Index extends Component{
 						/>
 					</section>
 					<div className={multipleClass(styles,'map-container')}>
-						<div id='container' className={multipleClass(styles, 'container')}></div>
+						<div id='container' className={multipleClass(styles, 'container')}>
+							{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
+						</div>
 					</div>
 				</WingBlank>
 			</div>
@@ -46,9 +50,13 @@ class Index extends Component{
 	getUserLocation = () => {
 		axios.get('/api/v1/location')
 			.then(res => {
-				let latLng = res.data[0] || {};
+				let latLng = res.data[0];
 				store.latLng = latLng;
-				this.loadScript();
+				if(latLng){
+					this.loadScript();
+				}else{
+					store.locationFail = true;
+				}
 			})
 			.then(res => {
 				let resData = res.data;
@@ -62,6 +70,8 @@ class Index extends Component{
 					promise.then(res => {
 						this.getUserLocation();
 					})
+				}else{
+					store.locationFail = true;
 				}
 			})
 	};

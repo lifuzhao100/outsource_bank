@@ -30,7 +30,8 @@ class Appointment extends Component{
 			<React.Fragment>
 				<Form layout='inline' className={multipleClass(styles, 'flex space-between select-bar')}>
 					<Form.Item>{getFieldDecorator('bank_id', {
-						initialValue: '0'
+						initialValue: '0',
+						trigger: 'onSelect'
 					})(
 						<Select className={multipleClass(styles, 'select')} onChange={() => this.getAppointmentList()}>
 							<Option value='0'>全部银行</Option>
@@ -38,7 +39,8 @@ class Appointment extends Component{
 						</Select>
 					)}</Form.Item>
 					<Form.Item>{getFieldDecorator('key', {
-						initialValue: ''
+						initialValue: '',
+						trigger: 'onChange'
 					})(
 						<Search placeholder='请输入搜索内容' onPressEnter={() => this.getAppointmentList()}/>
 					)}</Form.Item>
