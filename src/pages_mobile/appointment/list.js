@@ -18,8 +18,8 @@ class AppointmentList extends Component{
 			rowHasChanged: (row1, row2) => row1 !== row2,
 		});
 		store.appointment_list = [];
-		let day = getParam('day');
-		if(day){
+		let param = getParam();
+		if(param.day){
 			store.date = new Date(day);
 		}
 		this.page = 1;
