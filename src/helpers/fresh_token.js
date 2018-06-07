@@ -6,6 +6,7 @@ let wxToken = (notForce, code) => {
 	let appid = 'wxf4b7d664b2461f4b';
 	let requestURL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appid}&redirect_uri=${origin}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect;`
 	//notForce true,上传code供后端获取用户信息 false,强制重新获取code
+	alert(notForce);
 	if(!notForce){
 		window.location = requestURL;
 	}else{
