@@ -38,6 +38,7 @@ let getWxToken = (state = '') => {
 	//如果有code则上传
 	let code = getParam().code;
 	// alert(code);
+	alert(123);
 	return wxToken(!!code, code, state);
 };
 let refreshWxToken = () => {
