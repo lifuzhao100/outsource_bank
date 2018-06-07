@@ -41,12 +41,12 @@ class AppointmentList extends Component{
 				case 1:
 					if(user_type === 'admin'){
 						btns = [
-							<Button inline={true} size='small' type='warning' onClick={() => this.reject(rowData.order_id)}>拒绝</Button>,
-							<Button inline={true} size='small' type='primary' onClick={() => this.resolve(rowData.order_id)}>受理</Button>
+							<Button inline={true} size='small' type='warning' onClick={() => this.reject(rowData.id)}>拒绝</Button>,
+							<Button inline={true} size='small' type='primary' onClick={() => this.resolve(rowData.id)}>受理</Button>
 						]
 					}else{
 						btns = [
-							<Button inline={true} size='small' type='warning' onClick={() => this.cancel(rowData.order_id)}>取消</Button>
+							<Button inline={true} size='small' type='warning' onClick={() => this.cancel(rowData.id)}>取消</Button>
 						]
 					}
 					break;
@@ -160,36 +160,36 @@ class AppointmentList extends Component{
 				}
 			});
 	};
-	reject = (order_id) => {
+	reject = (id) => {
 		Modal.alert('拒绝受理', '将拒绝受理此项业务，请确认',[
 			{
 				text: '取消'
 			},
 			{
 				text: '确认',
-				onPress: () => this.handleAppointment(order_id, 3)
+				onPress: () => this.handleAppointment(id, 3)
 			}
 		])
 	};
-	resolve = (order_id) => {
+	resolve = (id) => {
 		Modal.alert('受理', '将受理此项业务，请确认',[
 			{
 				text: '取消'
 			},
 			{
 				text: '确认',
-				onPress: () => this.handleAppointment(order_id, 2)
+				onPress: () => this.handleAppointment(id, 2)
 			}
 		])
 	};
-	cancel = order_id => {
+	cancel = id => {
 		Modal.alert('取消预约', '将取消预约此项业务，请确认',[
 			{
 				text: '取消'
 			},
 			{
 				text: '确认',
-				onPress: () => this.handleAppointment(order_id, 4)
+				onPress: () => this.handleAppointment(id, 4)
 			}
 		])
 	};
@@ -197,9 +197,9 @@ class AppointmentList extends Component{
 		store.loading = true;
 		this.getAppointmentList(++this.page);
 	};
-	handleAppointment = (order_id, state) => {
+	handleAppointment = (id, state) => {
 		axios.post('/api/v1/order/handel', {
-			id: order_id,
+			id: id,
 			state
 		})
 			.then(res => {
@@ -207,7 +207,7 @@ class AppointmentList extends Component{
 				if(resData.error_code === 0 || resData.errorCode === 0){
 					let appointmentList = Array.from(store.appointment_list);
 					appointmentList.forEach(a => {
-						if(a.order_id === order_id){
+						if(a.id === id){
 							a.state = state;
 						}
 					});
