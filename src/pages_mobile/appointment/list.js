@@ -30,6 +30,8 @@ class AppointmentList extends Component{
 		if(param.state){//根据下面定义的格式，取出数据
 			let state = decodeURIComponent(param.state);
 			let data = state.split('*');
+			alert(data);
+			alert(data[0]);
 			store.date = new Date(data[0]);
 			store.grade = data[1];
 		}
