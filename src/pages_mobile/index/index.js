@@ -59,6 +59,7 @@ class Index extends Component{
 	}
 	componentDidMount(){
 		this.getIndexList();
+		this.getUserLocation();
 	}
 	getUserLocation = () => {
 		axios.get('/api/v1/location')
