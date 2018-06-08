@@ -154,7 +154,8 @@ class AppointmentList extends Component{
 				}
 				let concatResult;
 				if(resData.user_grade == 1){//用户
-					concatResult = appointmentList.concat(resData.orders);
+					//普通用户不需要分页。。。
+					concatResult = resData.orders;
 					store.user_type = 'user';
 				}else{//管理员
 					concatResult = appointmentList.concat(resData.data);
