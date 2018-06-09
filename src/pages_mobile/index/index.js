@@ -58,15 +58,15 @@ class Index extends Component{
 							)}
 						/>
 					</section>
-					<div className={multipleClass(styles,'map-container')} onClick={() => this.showBankPanel(true)}>
+					<a className={multipleClass(styles,'map-container')} onClick={() => this.showBankPanel(true,'a')}>
 						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
 							<div id='container' className={multipleClass(styles, 'container')}>
 								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
 							</div>
 						</div>
-					</div>
+					</a>
 					<Drawer
-						onOpenChange={() => this.showBankPanel(!open)}
+						onOpenChange={() => this.showBankPanel(!open, 'drawer')}
 						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 100 : -1, position: 'fixed'}}
 						contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
 						sidebarStyle={{ border: '1px solid #ddd' }}
