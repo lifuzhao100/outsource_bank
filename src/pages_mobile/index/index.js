@@ -58,7 +58,7 @@ class Index extends Component{
 							)}
 						/>
 					</section>
-					<a className={multipleClass(styles,'map-container')} onClick={() => this.showBankPanel(true,'a')}>
+					<a className={multipleClass(styles,'map-container')} onClick={(e) => this.showBankPanel(true, e)}>
 						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
 							<div id='container' className={multipleClass(styles, 'container')}>
 								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
@@ -66,7 +66,7 @@ class Index extends Component{
 						</div>
 					</a>
 					<Drawer
-						onOpenChange={() => this.showBankPanel(!open, 'drawer')}
+						onOpenChange={() => this.showBankPanel(!open)}
 						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 100 : -1, position: 'fixed'}}
 						contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
 						sidebarStyle={{ border: '1px solid #ddd' }}
@@ -257,8 +257,11 @@ class Index extends Component{
 				}
 			})
 	};
-	showBankPanel = (bool) => {
-		console.log(123);
+	showBankPanel = (bool, e) => {
+		if(e){
+			e.preventDefault();
+			e.stopPropagation();
+		}
 		store.open = bool;
 	}
 }
