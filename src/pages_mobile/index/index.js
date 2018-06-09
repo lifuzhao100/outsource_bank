@@ -29,7 +29,7 @@ class Index extends Component{
 					<List.Item key={index} thumb={<span>{index + 1}</span>}>
 						<h4 className={multipleClass(styles, 'bank-name')}>{distance.name}</h4>
 						<p className={multipleClass(styles, 'bank-address')}>{distance.address}</p>
-						<p className={multipleClass(styles, 'bank-distance')}>驾车距离: <span>{distance.distance}</span></p>
+						<p className={multipleClass(styles, 'bank-distance')}>驾车距离: <span>约{distance.distance}公里</span></p>
 					</List.Item>
 				);
 			})}
@@ -191,6 +191,7 @@ class Index extends Component{
 					...poi,
 					...result
 				};
+				bankItem.distance = bankItem.distance/1000;
 				return bankItem;
 			});
 			distanceList = mergeResults.sort((a, b) => {//排序
@@ -266,7 +267,7 @@ class Index extends Component{
 		this.timer = setTimeout(() => {
 			store.open = bool;
 			this.timer = null;
-		}, 300);
+		}, 100);
 	}
 }
 export default Index;
