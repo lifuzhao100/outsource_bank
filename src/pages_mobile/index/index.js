@@ -150,24 +150,17 @@ class Index extends Component{
 		let latLngs = [pois[0]].map(poi => {
 			return poi.latLng.lat + ',' + poi.latLng.lng;
 		});
-
-		window.resDistance = this.resDistance;
 		axios.get('http://apis.map.qq.com/ws/distance/v1/', {
 			params: {
 				mode: 'walking',
 				from: from,
 				to: latLngs.join(';'),
-				callback: 'resDistance',
-				output: 'jsonp',
 				key: 'GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA'
 			}
 		})
 			.then(res => {
-
+				console.log(res);
 			})
-	};
-	resDistance = (res) => {
-		console.log(res);
 	};
 	//获取轮播图
 	getCarouselList = () => {
