@@ -67,7 +67,7 @@ class Index extends Component{
 					</a>
 					<Drawer
 						onOpenChange={() => this.showBankPanel(!open)}
-						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 107 : -1, position: 'fixed'}}
+						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 9999 : -1, position: 'fixed'}}
 						contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
 						sidebarStyle={{ border: '1px solid #ddd' }}
 						sidebar={sidebar}
