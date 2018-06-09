@@ -147,19 +147,16 @@ class Index extends Component{
 	};
 	getDistance = (from, pois) => {
 		//单起点到多终点
-		let latLngs = [pois[0]].map(poi => {
+		let latLngs = pois.map(poi => {
 			return poi.latLng.lat + ',' + poi.latLng.lng;
 		});
-		axios.get('http://apis.map.qq.com/ws/distance/v1/', {
-			params: {
-				from: from,
-				to: latLngs.join(';'),
-				key: 'GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA'
-			}
-		})
-			.then(res => {
-				console.log(res);
-			})
+		window.resDistance = this.resDistance;
+		let script = document.createElement('script');
+		//默认以开车的方式
+		script.src = `http://apis.map.qq.com/ws/distance/v1/?from=${from}&to=${latLngs.join(';')}&key=GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA&output=jsonp&callback=resDistance`;
+	};
+	resDistance = (args) => {
+		console.log(args);
 	};
 	//获取轮播图
 	getCarouselList = () => {
