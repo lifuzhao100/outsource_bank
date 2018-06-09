@@ -152,7 +152,6 @@ class Index extends Component{
 		});
 		axios.get('http://apis.map.qq.com/ws/distance/v1/', {
 			params: {
-				mode: 'walking',
 				from: from,
 				to: latLngs.join(';'),
 				key: 'GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA'
