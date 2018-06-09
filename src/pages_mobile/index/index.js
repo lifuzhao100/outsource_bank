@@ -153,7 +153,7 @@ class Index extends Component{
 		let searchService = new qq.maps.SearchService({
 			complete : function(results){
 				let pois = results.detail.pois;
-				console.log(pois);
+				store.pois = pois;
 				for(let i = 0,l = pois.length;i < l; i++){
 					let poi = pois[i];
 					let marker = new qq.maps.Marker({
@@ -180,8 +180,30 @@ class Index extends Component{
 		script.src = `http://apis.map.qq.com/ws/distance/v1/?from=${from}&to=${latLngs.join(';')}&key=GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA&output=jsonp&callback=resDistance`;
 		document.body.appendChild(script);
 	};
-	resDistance = (args) => {
-		console.log(args);
+	resDistance = (res) => {
+		let distanceList = [];
+		let { pois } = store;
+		if(res.status === 0){
+			let results = res.result.elements;
+			let mergeResults = results.map((result, index) => {
+				let poi = pois[index];
+				let bankItem = {
+					...poi,
+					...result
+				};
+				return bankItem;
+			});
+			distanceList = mergeResults.sort((a, b) => {//排序
+				return a.distance - b.distance;
+			});
+		}else{
+			distanceList.push({
+				name: '获取银行位置失败',
+				address: '-',
+				distance: 0
+			});
+		}
+		store.distance_list = distanceList;
 	};
 	//获取轮播图
 	getCarouselList = () => {
