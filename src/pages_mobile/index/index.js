@@ -147,9 +147,10 @@ class Index extends Component{
 	};
 	getDistance = (from, pois) => {
 		//单起点到多终点
-		let latLngs = pois.map(poi => {
+		let latLngs = [pois[0]].map(poi => {
 			return poi.latLng.lat + ',' + poi.latLng.lng;
 		});
+
 		window.resDistance = this.resDistance;
 		axios.get('http://apis.map.qq.com/ws/distance/v1/', {
 			params: {
