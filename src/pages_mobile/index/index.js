@@ -262,7 +262,11 @@ class Index extends Component{
 			e.preventDefault();
 			e.stopPropagation();
 		}
-		store.open = bool;
+		if(this.timer) return;
+		this.timer = setTimeout(() => {
+			store.open = bool;
+			this.timer = null;
+		}, 300);
 	}
 }
 export default Index;
