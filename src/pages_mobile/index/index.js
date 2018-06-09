@@ -258,6 +258,7 @@ class Index extends Component{
 			})
 	};
 	showBankPanel = (bool) => {
+		console.log(123);
 		store.open = bool;
 	}
 }
