@@ -14,6 +14,11 @@ let routes = [{
 	name: 'index_config',
 	path: '/index/config',
 	component: () => import(/* webpackChunkName: "index_config" */ './pages_pc/index/config')
+},{
+	title: '轮播图配置',
+	name: 'carousel_config',
+	path: '/carousel/config',
+	component: () => import(/* webpackChunkName: "carousel_config" */ './pages_pc/carousel/config')
 }, {
 	title: '银行配置',
 	name: 'bank_config',

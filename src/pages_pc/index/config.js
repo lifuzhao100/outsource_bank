@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Avatar, Modal, Input, Form, Upload, Icon, message} from 'antd';
+import { Table, Button, Avatar, Modal, Input, Form, Upload, Icon, message, Tabs, Radio } from 'antd';
 import styles from  '../../less/index.config.less';
 import modalStyle from '../../less/modal_common.less';
 import multipleClass from '../../helpers/multiple_class';
@@ -9,6 +9,12 @@ import store from '../../stores/index_config';
 import { observer } from 'mobx-react';
 import axios from 'axios';
 import { SIZE } from "../../config/CONSTANT";
+const { TabPane } = Tabs;
+const carousel_key = '1';
+const module_key = '2';
+const carousel_word = '轮播图';
+const module_word = '模块图';
+
 @observer
 class AddIndex extends Component{
 	render(){
@@ -17,11 +23,15 @@ class AddIndex extends Component{
 		let { getFieldDecorator } = form;
 		let inits = {
 			logo: '',
-			url: ''
+			url: '',
+			type: module_key
 		};
+		let disabledRadio = false;//编辑时禁止切换图片类型
 		if(editType === 'edit'){
 			inits.logo = selectItem.logo;
 			inits.url = selectItem.url;
+			inits.type = '' + selectItem.type;
+			disabledRadio = true;
 		}
 		if(!logo){
 			logo = inits.logo;
@@ -46,6 +56,18 @@ class AddIndex extends Component{
 								</div>
 							)}
 						</Upload>
+					)}</Form.Item>
+					<Form.Item label='图片用途' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('type', {
+						initialValue: inits.type,
+						rules: [{
+							required: true,
+							message: '请选择图片用途'
+						}]
+					})(
+						<Radio.Group disabled={disabledRadio}>
+							<Radio value={module_key}>{module_word}</Radio>
+							<Radio value={carousel_key}>{carousel_word}</Radio>
+						</Radio.Group>
 					)}</Form.Item>
 					<Form.Item label='链接' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('url', {
 						initialValue: inits.url,
@@ -75,7 +97,7 @@ class AddIndex extends Component{
 		this.props.form.validateFields();
 		let errors = this.props.form.getFieldsError();
 		if(!haveError(errors)){
-			let { url } = this.props.form.getFieldsValue();
+			let { url, type } = this.props.form.getFieldsValue();
 			let { logo, selectItem } = store;
 			let token = getToken();
 			if(token){
@@ -117,6 +139,7 @@ class AddIndex extends Component{
 				}else{//新增
 					let dealLogo = logo.replace(/^data:.*base64,/, '');
 					params.logo = dealLogo;
+					params.type = type;
 					axios.post('/api/v1/nav/save', params, {
 						headers:{
 							token
@@ -148,18 +171,35 @@ class AddIndex extends Component{
 	}
 }
 const AddIndexWithForm = Form.create()(AddIndex);
+
 @observer
 class IndexConfig extends Component{
+	constructor(props){
+		super(props);
+		store.activeTab = module_key;//默认模块图
+		store.indexList = [];
+	}
 	render(){
-		let { indexList, visible, editType, tableLoading} = store;
+		let { indexList, visible, editType, tableLoading, activeTab } = store;
 		let dataSource = Array.from(indexList);
+		let Main = (
+			<React.Fragment>
+				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={false} loading={tableLoading}/>
+				<AddIndexWithForm visible={visible} editType={editType} />
+			</React.Fragment>
+		);
 		return (
 			<React.Fragment>
-				<div style={{textAlign: 'right', paddingBottom: '24px'}}>
-					<Button type='primary' onClick={this.openModal}>新增</Button>
+				<div className={multipleClass(styles, 'handle-bar')}>
+					<div className={multipleClass(styles, 'bar-container')}>
+						<Button type='primary' onClick={this.openModal}>新增</Button>
+					</div>
 				</div>
-				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={false} loading={tableLoading}/>
-				<AddIndexWithForm visible={visible} editType={editType}/>
+				{/*这里强行加一个tab*/}
+				<Tabs defaultActiveKey={activeTab} onTabClick={this.clickTab}>
+					<TabPane key={module_key} tab={module_word}>{Main}</TabPane>
+					<TabPane key={carousel_key} tab={carousel_word}>{Main}</TabPane>
+				</Tabs>
 			</React.Fragment>
 		)
 	}
@@ -169,11 +209,13 @@ class IndexConfig extends Component{
 	getIndexList = (page = 1) => {
 		let token = getToken();
 		if(token){
+			let { activeTab } = store;
 			store.tableLoading = true;
 			axios.get('/api/v1/navs', {
 				params: {
 					page,
-					size: SIZE
+					size: SIZE,
+					type: activeTab
 				}
 			}, {
 				headers: {
@@ -182,7 +224,7 @@ class IndexConfig extends Component{
 			})
 				.then(res => {
 					let resData = res.data;
-					store.indexList = resData;
+					store.indexList = resData.data;
 					store.total = resData.total;
 					store.tableLoading = false;
 				})
@@ -190,6 +232,10 @@ class IndexConfig extends Component{
 					store.tableLoading = false;
 				})
 		}
+	};
+	clickTab = (tab) => {
+		store.activeTab = tab;
+		this.getIndexList();
 	};
 	handleIndexConfigState = (e, record) => {
 		e.preventDefault();

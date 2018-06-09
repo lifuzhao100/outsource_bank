@@ -8,7 +8,6 @@ class Wrapper extends Component{
 	render(){
 		let { Comp } = this.state;
 		let props = this.props;
-		console.log(props);
 		if(!Comp) return <div style={{width: '100%', height: '100%', textAlign: 'center'}}><Spin/></div>;
 		return (
 			<DocumentTitle title={props.title}>

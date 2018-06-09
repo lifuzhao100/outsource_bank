@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WingBlank, Grid } from 'antd-mobile';
+import { WingBlank, Grid, Carousel } from 'antd-mobile';
 import banner from '../../imgs/banner.png';
 import head from '../../imgs/head.png';
 import styles from '../../less/index.mobile.less';
@@ -11,15 +11,25 @@ import { getWxToken } from '../../helpers/fresh_token';
 import bottomImg from '../../imgs/bottom.png';
 @observer
 class Index extends Component{
+	constructor(props){
+		super(props);
+		store.carousel_list = [];//轮播图
+		store.index_list = [];//首页模块图
+	}
 	render(){
 		let { locationFail } = store;
 		let list = Array.from(store.index_list);
+		let carouselList = Array.from(store.carousel_list);
 		return (
 			<div className={multipleClass(styles, 'index')}>
 				<WingBlank style={{boxShadow: '0 2px 8px rgba(0,0,0,.09)'}}>
-					<div>
-						<img src={banner} style={{width: '100%'}}/>
-					</div>
+					<Carousel style={{width: '100%', height: '100%'}} infinite autoplay={true}>
+						{carouselList.map((carousel, index) => (
+							<a key={'carousel-' + index} href={carousel.url} className={multipleClass(styles, 'carousel-link')}>
+								<img src={carousel.logo} className={multipleClass(styles, 'carousel-img')}/>
+							</a>
+						))}
+					</Carousel>
 					<section className={multipleClass(styles, 'grid-section')}>
 						<h3>
 							<img src={head} style={{width: '100%'}}/>
@@ -34,7 +44,7 @@ class Index extends Component{
 							)}
 						/>
 					</section>
-					<div className={multipleClass(styles,'map-container')}>
+					<div className={multipleClass(styles,'map-container')} onClick={this.showBankPanel}>
 						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
 							<div id='container' className={multipleClass(styles, 'container')}>
 								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
@@ -46,6 +56,7 @@ class Index extends Component{
 		)
 	}
 	componentDidMount(){
+		this.getCarouselList();
 		this.getIndexList();
 		this.getUserLocation();
 	}
@@ -85,6 +96,7 @@ class Index extends Component{
 		document.body.appendChild(script);
 	};
 	initMap = () => {
+		let that = this;
 		let { latLng } = store;
 		let { latitude, longitude } = latLng;
 		let mapContainer = document.getElementById('container');
@@ -114,14 +126,12 @@ class Index extends Component{
 		};
 		let map = new qq.maps.Map(mapContainer, myOptions);
 		let markers = [];
-		let latLngBounds = new qq.maps.LatLngBounds();
 		//调用Poi检索类
 		let searchService = new qq.maps.SearchService({
 			complete : function(results){
 				let pois = results.detail.pois;
 				for(let i = 0,l = pois.length;i < l; i++){
 					let poi = pois[i];
-					latLngBounds.extend(poi.latLng);
 					let marker = new qq.maps.Marker({
 						map:map,
 						position: poi.latLng
@@ -129,14 +139,66 @@ class Index extends Component{
 					marker.setTitle(i+1);
 					markers.push(marker);
 				}
-				map.fitBounds(latLngBounds);
+				that.getDistance(latitude+',' + longitude, pois);
 			}
 		});
 		searchService.setPageCapacity(20);
-		searchService.searchNearBy('银行', myLatlng, 2000);
+		searchService.searchNearBy('农商行', myLatlng, 2000);
 	};
+	getDistance = (from, pois) => {
+		//单起点到多终点
+		let latLngs = pois.map(poi => {
+			return poi.latLng.lat + ',' + poi.latLng.lng;
+		});
+		window.resDistance = this.resDistance;
+		axios.get('http://apis.map.qq.com/ws/distance/v1/', {
+			params: {
+				mode: 'walking',
+				from: from,
+				to: latLngs.join(';'),
+				callback: 'resDistance'
+			}
+		})
+			.then(res => {
+
+			})
+	};
+	resDistance = (res) => {
+		console.log(res);
+	};
+	//获取轮播图
+	getCarouselList = () => {
+		axios.get('/api/v1/wx/navs', {
+			params: {
+				type: 1
+			}
+		})
+			.then(res => {
+				let resData = res.data;
+				store.carousel_list = resData;
+			})
+			.catch(res => {
+				let resData = res.data;
+				if (!resData) {
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getCarouselList();
+					})
+				} else if (resData.error_code === 10001 || resData.errorCode === 10001) {
+					let promise = getWxToken();
+					promise.then(res => {
+						this.getCarouselList();
+					})
+				}
+			})
+	};
+	//获取首页模块图
 	getIndexList = () => {
-		axios.get('/api/v1/wx/navs')
+		axios.get('/api/v1/wx/navs', {
+			params: {
+				type: 2
+			}
+		})
 			.then(res => {
 				let resData = res.data;
 				store.index_list = resData;
@@ -155,6 +217,9 @@ class Index extends Component{
 					})
 				}
 			})
+	};
+	showBankPanel = () => {
+
 	}
 }
 export default Index;

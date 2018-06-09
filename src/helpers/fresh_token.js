@@ -38,7 +38,9 @@ let getWxToken = (state = '') => {
 	//如果有code则上传
 	let code = getParam().code;
 	// alert(code);
-	alert(123);
+	if(location.host.indexOf('localhost') !== -1 || location.host.indexOf('127.0.0.1') !== -1) return new Promise((resolve, reject) => {
+		reject();
+	});
 	return wxToken(!!code, code, state);
 };
 let refreshWxToken = () => {

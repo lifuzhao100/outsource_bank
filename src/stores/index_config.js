@@ -6,6 +6,7 @@ class Store {
 	@observable modalLoading = false;
 	@observable selectItem = {};
 	@observable tableLoading = false;
+	@observable activeTab ;
 	@computed get editType(){
 		return !!this.selectItem.id ? 'edit' : 'add';
 	}
