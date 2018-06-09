@@ -154,6 +154,7 @@ class Index extends Component{
 		let script = document.createElement('script');
 		//默认以开车的方式
 		script.src = `http://apis.map.qq.com/ws/distance/v1/?from=${from}&to=${latLngs.join(';')}&key=GW2BZ-TQNE6-KTASK-E7CO3-22Z37-6IBXA&output=jsonp&callback=resDistance`;
+		document.body.appendChild(script);
 	};
 	resDistance = (args) => {
 		console.log(args);
