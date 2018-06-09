@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router';
 import routes from '../routes_mobile';
 import handleRoutes from '../helpers/handle_wx_routes';
 const routeArr = handleRoutes(routes);
+import '../less/mobile.less';
 class App extends Component{
 	render(){
 		return (

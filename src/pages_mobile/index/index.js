@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WingBlank, Grid, Carousel } from 'antd-mobile';
+import { WingBlank, Grid, Carousel, Drawer, List } from 'antd-mobile';
 import banner from '../../imgs/banner.png';
 import head from '../../imgs/head.png';
 import styles from '../../less/index.mobile.less';
@@ -15,14 +15,28 @@ class Index extends Component{
 		super(props);
 		store.carousel_list = [];//轮播图
 		store.index_list = [];//首页模块图
+		store.distance_list = [];
+		store.open = false;
 	}
 	render(){
-		let { locationFail } = store;
+		let { locationFail, distance_list,carousel_list, open } = store;
 		let list = Array.from(store.index_list);
-		let carouselList = Array.from(store.carousel_list);
+		let carouselList = Array.from(carousel_list);
+		let distanceList = Array.from(distance_list);
+		const sidebar = (<List className={multipleClass(styles, 'bank-list')}>
+			{distanceList.map((distance, index) => {
+				return (
+					<List.Item key={index} thumb={<span>{index + 1}</span>}>
+						<h4 className={multipleClass(styles, 'bank-name')}>{distance.name}</h4>
+						<p className={multipleClass(styles, 'bank-address')}>{distance.address}</p>
+						<p className={multipleClass(styles, 'bank-distance')}>驾车距离: <span>{distance.distance}</span></p>
+					</List.Item>
+				);
+			})}
+		</List>);
 		return (
 			<div className={multipleClass(styles, 'index')}>
-				<WingBlank style={{boxShadow: '0 2px 8px rgba(0,0,0,.09)'}}>
+				<WingBlank style={{boxShadow: '0 2px 8px rgba(0,0,0,.09)', height: '100%'}}>
 					<Carousel style={{width: '100%', height: '100%'}} infinite autoplay={true}>
 						{carouselList.map((carousel, index) => (
 							<a key={'carousel-' + index} href={carousel.url} className={multipleClass(styles, 'carousel-link')}>
@@ -44,13 +58,22 @@ class Index extends Component{
 							)}
 						/>
 					</section>
-					<div className={multipleClass(styles,'map-container')} onClick={this.showBankPanel}>
+					<div className={multipleClass(styles,'map-container')} onClick={() => this.showBankPanel(true)}>
 						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
 							<div id='container' className={multipleClass(styles, 'container')}>
 								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
 							</div>
 						</div>
 					</div>
+					<Drawer
+						onOpenChange={this.showBankPanel}
+						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 100 : -1 }}
+						contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
+						sidebarStyle={{ border: '1px solid #ddd' }}
+						sidebar={sidebar}
+						open={open}
+						position='bottom'
+					/>
 				</WingBlank>
 			</div>
 		)
@@ -130,6 +153,7 @@ class Index extends Component{
 		let searchService = new qq.maps.SearchService({
 			complete : function(results){
 				let pois = results.detail.pois;
+				console.log(pois);
 				for(let i = 0,l = pois.length;i < l; i++){
 					let poi = pois[i];
 					let marker = new qq.maps.Marker({
@@ -211,8 +235,8 @@ class Index extends Component{
 				}
 			})
 	};
-	showBankPanel = () => {
-
+	showBankPanel = (bool) => {
+		store.open = bool;
 	}
 }
 export default Index;
