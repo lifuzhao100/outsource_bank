@@ -97,13 +97,13 @@ module.exports = {
 		new Clean(['build'], {
 			root: root
 		}),
-		new Copy([{
-			from: 'copy-to-build/**.*',
-			to: '[name].[ext]',
-			toType: 'template'
-		}], {
-			context: root
-		}),
+		// new Copy([{
+		// 	from: 'static-build/**.*',
+		// 	to: '[name].[ext]',
+		// 	toType: 'template'
+		// }], {
+		// 	context: root
+		// }),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production')
 		}),

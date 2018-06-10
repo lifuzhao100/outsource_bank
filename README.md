@@ -64,12 +64,6 @@
   pm2 delete app_name
 ```
 # 其他相关
-如果需要把某些文件复制到build文件夹中，请不要手动复制到build中，请先复制到copy-to-build,再执行
-```markdown
-  npm run build
-```
+static-build文件夹的文件，可以通过/build/访问, 如static-build/app.js,可以通过http://your-server.com/build/app.js
 ### 公众号配置appid
-copy-to-build文件下的wx_config.js可以修改公众号的appId。修改后请执行npm run build才能生效
-```markdown
-  npm run build
-```
+static-build文件夹下的wx_config.js可以修改公众号的appId。

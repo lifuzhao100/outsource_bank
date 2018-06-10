@@ -26,5 +26,8 @@ for (let file in files){
 		files[file].maxAge = 0;
 	}
 }
-
+app.use(staticCache(join(__dirname, 'static-build')), {
+	maxAge: 0,
+	prefix: '/build/'
+});
 app.listen(7500);
