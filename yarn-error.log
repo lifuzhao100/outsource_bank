@@ -1,5 +1,5 @@
 Arguments: 
-  G:\nodejs\node.exe G:\Yarn\bin\yarn.js build
+  G:\nodejs\node.exe G:\Yarn\bin\yarn.js dev
 
 PATH: 
   C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;G:\Git\cmd;G:\Git\mingw64\bin;G:\Git\usr\bin;G:\Yarn\bin\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;G:\nodejs\;C:\WINDOWS\System32\OpenSSH\;C:\Users\lifuzhao100\AppData\Local\Microsoft\WindowsApps;C:\Users\lifuzhao100\AppData\Local\Yarn\bin;C:\Users\lifuzhao100\AppData\Roaming\npm;
@@ -56,9 +56,9 @@ npm manifest:
       "mobx-react": "^5.1.2",
       "moment": "^2.22.2",
       "react": "^16.4.0",
+      "react-document-title": "^2.0.3",
       "react-dom": "^16.4.0",
-      "react-router": "^4.2.0",
-      "react-router-dom": "^4.2.2"
+      "react-router": "^4.2.0"
     },
     "name": "bank",
     "version": "1.0.0",
@@ -2673,7 +2673,7 @@ Lockfile:
       signal-exit "^3.0.0"
       strip-eof "^1.0.0"
   
-  exenv@^1.2.0:
+  exenv@^1.2.0, exenv@^1.2.1:
     version "1.2.2"
     resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
   
@@ -6164,6 +6164,13 @@ Lockfile:
       minimist "^1.2.0"
       strip-json-comments "~2.0.1"
   
+  react-document-title@^2.0.3:
+    version "2.0.3"
+    resolved "https://registry.yarnpkg.com/react-document-title/-/react-document-title-2.0.3.tgz#bbf922a0d71412fc948245e4283b2412df70f2b9"
+    dependencies:
+      prop-types "^15.5.6"
+      react-side-effect "^1.0.2"
+  
   react-dom@^16.4.0:
     version "16.4.0"
     resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
@@ -6232,17 +6239,6 @@ Lockfile:
       prop-types "^15.5.10"
       react-tween-state "^0.1.5"
   
-  react-router-dom@^4.2.2:
-    version "4.2.2"
-    resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.2.2.tgz#c8a81df3adc58bba8a76782e946cbd4eae649b8d"
-    dependencies:
-      history "^4.7.2"
-      invariant "^2.2.2"
-      loose-envify "^1.3.1"
-      prop-types "^15.5.4"
-      react-router "^4.2.0"
-      warning "^3.0.0"
-  
   react-router@^4.2.0:
     version "4.2.0"
     resolved "https://registry.yarnpkg.com/react-router/-/react-router-4.2.0.tgz#61f7b3e3770daeb24062dae3eedef1b054155986"
@@ -6254,6 +6250,13 @@ Lockfile:
       path-to-regexp "^1.7.0"
       prop-types "^15.5.4"
       warning "^3.0.0"
+  
+  react-side-effect@^1.0.2:
+    version "1.1.5"
+    resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.5.tgz#f26059e50ed9c626d91d661b9f3c8bb38cd0ff2d"
+    dependencies:
+      exenv "^1.2.1"
+      shallowequal "^1.0.1"
   
   react-slick@~0.23.1:
     version "0.23.1"
@@ -8046,9 +8049,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 2
+  Exit code: 3221225786
   Command: C:\WINDOWS\system32\cmd.exe
-  Arguments: /d /s /c webpack --config=config/build.js --progress --profile --json > stats.json
+  Arguments: /d /s /c webpack-dev-server --config=config/dev.js --hot
   Directory: E:\zb\bank2
   Output:
   

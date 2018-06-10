@@ -98,7 +98,7 @@ module.exports = {
 			root: root
 		}),
 		new Copy([{
-			from: 'wx_file/**.*',
+			from: 'copy-to-build/**.*',
 			to: '[name].[ext]',
 			toType: 'template'
 		}], {
