@@ -8,7 +8,7 @@ class AppointmentResult extends Component{
 		return (
 			<div className={multipleClass(styles, 'result')}>
 				<Result
-					img={<Icon type="check-circle" className={multipleClass(styles, 'result-icon')} style={{ fill: '#1F90E6' }} />}
+					img={<Icon type="check-circle" className={multipleClass(styles, 'result-icon')} style={{ fill: '#04be02' }} />}
 					title="新增成功"
 					message="申请已提交，请等待处理"
 				/>

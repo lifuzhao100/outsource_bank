@@ -153,14 +153,14 @@ class AppointmentList extends Component{
 					appointmentList = [];
 				}
 				let concatResult;
-				if(resData.user_grade == 1){//用户
-					//普通用户不需要分页。。。
-					concatResult = resData.orders;
-					store.user_type = 'user';
-				}else{//管理员
+				if(resData.user_grade == 2){//管理员
 					concatResult = appointmentList.concat(resData.data);
 					store.total = resData.total;
 					store.user_type = 'admin';
+				}else{//用户
+					//普通用户不需要分页。。。
+					concatResult = resData.orders;
+					store.user_type = 'user';
 				}
 				store.appointment_list = concatResult;
 				store.dataSource = store.dataSource.cloneWithRows(concatResult);

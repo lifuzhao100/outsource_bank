@@ -21,13 +21,17 @@ app.use(staticCache(join(__dirname, 'build'), {
 	gzip: true,
 	prefix: '/build/'
 }, files));
+app.use(staticCache(join(__dirname, 'static-build'), {
+	prefix: '/static-build/',
+	maxAge: 0
+}));
 for (let file in files){
 	if(/\.html$/.test(file)){
 		files[file].maxAge = 0;
 	}
 }
-app.use(staticCache(join(__dirname, 'static-build')), {
-	maxAge: 0,
-	prefix: '/build/'
-});
+// app.use(staticCache(join(__dirname, 'static-build') , {
+// 	maxAge: 0,
+// 	prefix: '/static-build/'
+// }));
 app.listen(7500);
