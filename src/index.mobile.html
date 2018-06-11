@@ -22,7 +22,8 @@
 				document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
 			}
     </script>
-    <script src="/static-build/wx_config.js"></script>
+    <!-- 这是为已经缓存了的用户添加版本号，以避免缓存影响。新用户不会受到缓存的影响 -->
+    <script src="/build/wx_config.js?v=100"></script>
 </head>
 <body>
 
