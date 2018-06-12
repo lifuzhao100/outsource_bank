@@ -8,6 +8,10 @@ import store from '../../stores/bank_bind';
 import { observer } from 'mobx-react';
 @observer
 class BankBind extends Component{
+	constructor(props){
+		super(props);
+		store.total = 0;
+	}
 	render(){
 		let total = store.total;
 		let dataSource = Array.from(store.user_list);
@@ -16,7 +20,7 @@ class BankBind extends Component{
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Search placeholder='请输入搜索关键字' onSearch={this.handlePressEnter} style={{width: 200}}/>
 				</div>
-				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? { onChange: page => this.getUserList(page) } : false}/>
+				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? {total, onChange: page => this.getUserList(page) } : false}/>
 			</React.Fragment>
 		)
 	}
@@ -36,6 +40,7 @@ class BankBind extends Component{
 				.then(res => {
 					let resData = res.data;
 					store.user_list = resData.data;
+					store.total = resData.total;
 				})
 				.catch(res => {
 					message.error(res.data.msg);
