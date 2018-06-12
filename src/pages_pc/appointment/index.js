@@ -11,7 +11,6 @@ import getToken from '../../helpers/get_token';
 import axios from 'axios';
 import { observer } from 'mobx-react';
 import { SIZE } from "../../config/CONSTANT";
-
 @observer
 class Appointment extends Component{
 	constructor(props){
@@ -51,7 +50,7 @@ class Appointment extends Component{
 						<RangePicker allowClear={false} onChange={() => this.getAppointmentList()}/>
 					)}</Form.Item>
 				</Form>
-				<Table columns={this.columns} dataSource={dataSource} pagination={total > SIZE ? { total, onChange: page => this.getAppointmentList(page)} : false}/>
+				<Table columns={this.columns} dataSource={dataSource} pagination={total > SIZE ? { total,pageSize: SIZE, onChange: page => this.getAppointmentList(page)} : false}/>
 			</React.Fragment>
 		)
 	}

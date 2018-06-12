@@ -15,7 +15,7 @@ class AddBank extends Component{
 	render(){
 		let { visible, form } = this.props;
 		let { getFieldDecorator } = form;
-		let { logo, modalLoading } = store;
+		let { logo, modalLoading, total } = store;
 		return (
 			<Modal
 				visible={visible}
@@ -111,6 +111,7 @@ class AddBank extends Component{
 	};
 	closeModal = () => {
 		store.visible = false;
+		store.logo = '';
 		store.modalLoading = false;
 	}
 }

@@ -33,8 +33,8 @@ class BasicLayout extends Component{
 						</div>
 					</div>
 				</Header>
-				<Content style={{height: 'calc(100% - 64px)',paddingTop: '24px'}}>
-					<div className={multipleClass(styles, 'flex content')}>
+				<Content style={{height: 'calc(100% - 64px)', minHeight: 'calc(100% - 64px)',paddingTop: '24px', position: 'relative'}}>
+					<div className={multipleClass(styles, 'flex content')} style={{minHeight: `${document.documentElement.clientHeight-90}px`}}>
 						<SiderTree/>
 						<div className={multipleClass(styles, 'main')}>
 							<h3 className={multipleClass(styles, 'page-title')}>{title}</h3>

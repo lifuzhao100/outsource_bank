@@ -1,11 +1,18 @@
 .layout{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+
 }
 .header, .content{
   width: 90%;
   max-width: 1360px;
   margin: 0 auto;
+  background-color: #fff;
+}
+.content{
+  height: calc(100% - 64px);
+  min-height: calc(100% - 64px);
+  //position: absolute;
 }
 .no-padding{
   padding: 0;

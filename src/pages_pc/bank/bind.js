@@ -20,7 +20,7 @@ class BankBind extends Component{
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Search placeholder='请输入搜索关键字' onSearch={this.handlePressEnter} style={{width: 200}}/>
 				</div>
-				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? {total, onChange: page => this.getUserList(page) } : false}/>
+				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? {total,pageSize: SIZE, onChange: page => this.getUserList(page) } : false}/>
 			</React.Fragment>
 		)
 	}
