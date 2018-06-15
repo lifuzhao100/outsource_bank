@@ -82,12 +82,12 @@ class AppointmentList extends Component{
 					<div style={{ display: '-webkit-box', display: 'flex', padding: '10px 0' }}>
 						<img style={{ height: '64px', marginRight: '15px' }} src={rowData.headimgurl} alt="" />
 						<div style={{ lineHeight: 1, flexGrow: 1, flexShrink: 1 }}>
-							<div style={{display: 'flex'}}>
-								<div style={{ marginBottom: '8px', fontWeight: 'bold', flexGrow: 1, flexShrink: 1 }}>{rowData.name}</div>
+							<div style={{display: 'flex', marginBottom: '12px'}}>
+								<div style={{ fontWeight: 'bold', flexGrow: 1, flexShrink: 1 }}>{rowData.name}</div>
 								<div className={multipleClass(styles, 'btn-group')} style={{flexGrow: 0, flexShrink: 0, margin: '-5px 0'}}>{btns}</div>
 							</div>
-							<p style={{margin: '0 0 5px'}}>{rowData.address}, {rowData.sex === MALE ? '男' : '女'}, <a href={`tel:${rowData.phone}`}>{rowData.phone}</a></p>
-							<p style={{margin: '0 0 5px'}}>{rowData.service + '/' +rowData.service_item}{rowData.money > 0 ? '/' + rowData.money : ''}</p>
+							<p style={{margin: '0 0 8px'}}>{rowData.address}, {rowData.sex === MALE ? '男' : '女'}, <a href={`tel:${rowData.phone}`}>{rowData.phone}</a></p>
+							<p style={{margin: '0 0 8px'}}>{rowData.service + '/' +rowData.service_item}{rowData.money > 0 ? '/' + rowData.money : ''}</p>
 						</div>
 					</div>
 				</div>
