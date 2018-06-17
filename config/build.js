@@ -126,7 +126,7 @@ module.exports = {
 			chunks: ['vendor','mobile/index'],
 		}),
 		new HtmlWebpackPlugin({
-			filename: 'index.html',
+			filename: 'test.html',
 			template: './test.html',
 			inject: 'body',
 			chunks: ['test'],
