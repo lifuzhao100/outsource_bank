@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { WingBlank, Grid, Carousel, Drawer, List } from 'antd-mobile';
-import banner from '../../imgs/banner.png';
 import head from '../../imgs/head.png';
 import styles from '../../less/index.mobile.less';
 import multipleClass from '../../helpers/multiple_class';
