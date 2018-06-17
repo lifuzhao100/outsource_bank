@@ -12,15 +12,17 @@ class BankBind extends Component{
 		super(props);
 		store.total = 0;
 	}
+	page = 1;
 	render(){
 		let total = store.total;
 		let dataSource = Array.from(store.user_list);
+		let current = this.page;
 		return (
 			<React.Fragment>
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Search placeholder='请输入搜索关键字' onSearch={this.handlePressEnter} style={{width: 200}}/>
 				</div>
-				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? {total,pageSize: SIZE, onChange: page => this.getUserList(page) } : false}/>
+				<Table columns={this.columns} dataSource={dataSource} rowKey='id' pagination={total > SIZE ? {total,pageSize: SIZE,current, onChange: page => this.getUserList(page) } : false}/>
 			</React.Fragment>
 		)
 	}
@@ -29,6 +31,7 @@ class BankBind extends Component{
 	}
 	getUserList = (page = 1) => {
 		let token = getToken();
+		this.page = page;
 		if(token){
 			axios.get('/api/v1/users', {
 				params: {

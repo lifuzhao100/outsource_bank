@@ -90,6 +90,14 @@ class Index extends Component{
 				store.latLng = latLng;
 				if(latLng){
 					this.loadScript();
+					setTimeout(() => {
+						axios.get('/api/v1/location')
+							.then(newRes => {
+								let newLatLng = newRes.data[0];
+								store.latLng = newLatLng;
+								this.initMap();
+							})
+					}, 5500);//5.5秒之后再次获取最新的地理位置。
 				}else{
 					store.locationFail = true;
 				}
@@ -157,7 +165,7 @@ class Index extends Component{
 				for(let i = 0,l = pois.length;i < l; i++){
 					let poi = pois[i];
 					let marker = new qq.maps.Marker({
-						map:map,
+						map: map,
 						position: poi.latLng
 					});
 					marker.setTitle(i+1);

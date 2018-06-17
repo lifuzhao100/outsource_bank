@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, Form, Input, Radio, message } from 'antd';
 import { observer } from 'mobx-react';
+import { autorun } from 'mobx';
 const { TextArea } = Input;
 import styles from  '../../less/service_config.less';
 import modalStyle from '../../less/modal_common.less';
@@ -89,12 +90,6 @@ class AddNEditService extends Component{
 						}
 					})
 						.then(res => {
-							let resData = res.data;
-							store.service_list.push({
-								id: resData.id,
-								...values,
-								item: values.item.split('/')
-							});
 							this.closeModal();
 						})
 						.catch(res => {
@@ -115,18 +110,6 @@ class AddNEditService extends Component{
 						.then(res => {
 							let resData = res.data;
 							if(resData.error_code === 0 || resData.errorCode === 0){
-								let list = Array.from(store.service_list);
-								store.service_list = list.map(item => {
-									let newItem = {...item};
-									if(id === item.id){
-										newItem = {
-											...values,
-											id: id,
-											item: values.item.trim().split('/')
-										}
-									}
-									return newItem;
-								});
 								this.closeModal();
 							}
 						})
@@ -164,7 +147,11 @@ class ServiceConfig extends Component{
 		)
 	}
 	componentDidMount(){
-		this.getServiceList();
+		autorun(() => {
+			if(!store.visible){
+				this.getServiceList();
+			}
+		})
 	}
 	getServiceList = page => {
 		let token = getToken();

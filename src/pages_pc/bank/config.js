@@ -4,6 +4,7 @@ import styles from  '../../less/index.config.less';
 import modalStyle from '../../less/modal_common.less';
 import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
+import { autorun } from 'mobx';
 import store from '../../stores/bank.config';
 import axios from 'axios';
 import getToken from '../../helpers/get_token';
@@ -12,10 +13,13 @@ import history from '../../history';
 import haveError from "../../helpers/have_error";
 @observer
 class AddBank extends Component{
+	init = {};
 	render(){
 		let { visible, form } = this.props;
 		let { getFieldDecorator } = form;
-		let { logo, modalLoading, total } = store;
+		let { logo, modalLoading } = store;
+		let init = this.init;
+		let modalTitle = this.props.selectItem ? '编辑' : '新增';
 		return (
 			<Modal
 				visible={visible}
@@ -25,9 +29,10 @@ class AddBank extends Component{
 				okText='确认'
 				onOk={this.confirm}
 				cancelText='取消'
-				title={<p className={multipleClass(modalStyle, 'modal-title')}>新增银行<small>填写银行信息</small></p>}>
+				title={<p className={multipleClass(modalStyle, 'modal-title')}>{modalTitle}银行<small>填写银行信息</small></p>}>
 				<Form>
 					<Form.Item wrapperCol={{push: 6,span: 10}}>{getFieldDecorator('logo', {
+						initialValue: init.logo,
 						rules: [{
 							required: true,
 							message: '请上传银行logo'
@@ -49,6 +54,7 @@ class AddBank extends Component{
 						</Upload>
 					)}</Form.Item>
 					<Form.Item label='银行名称' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('name', {
+						initialValue: init.name,
 						rules: [{
 							required: true,
 							message: '银行名称不能为空'
@@ -56,7 +62,8 @@ class AddBank extends Component{
 					})(
 						<Input placeholder='请输入银行名称'/>
 					)}</Form.Item>
-					<Form.Item label='银行地址' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('address', {
+					<Form.Item label='银行地址' labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>{getFieldDecorator('address', {
+						initialValue: init.address,
 						rules: [{
 							required: true,
 							message: '银行地址不能为空'
@@ -64,9 +71,31 @@ class AddBank extends Component{
 					})(
 						<Input placeholder='请输入银行地址'/>
 					)}</Form.Item>
+					{!!init.order ? (
+						<Form.Item label='排序' labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>{getFieldDecorator('order', {
+							initialValue: init.order,
+							rules: [{
+								required: true,
+								message: '银行顺序不能为空'
+							}]
+						})(
+							<Input placeholder='请输入银行顺序'/>
+						)}</Form.Item>
+					) : null }
 				</Form>
 			</Modal>
 		)
+	}
+	componentWillReceiveProps(nextProps){
+		let selectItem = nextProps.selectItem;
+		if(selectItem){
+			store.logo = selectItem.logo;
+			this.init = {
+				...selectItem
+			};
+		}else{
+			this.init = {};
+		}
 	}
 	handlePreview = (file) => {
 		let reader = new FileReader();
@@ -77,35 +106,49 @@ class AddBank extends Component{
 		return false;
 	};
 	confirm = () => {
-		this.props.form.validateFields();
-		let errors = this.props.form.getFieldsError();
+		let { form, selectItem } = this.props;
+		form.validateFields();
+		let errors = form.getFieldsError();
 		if(!haveError(errors)){
 			let token = getToken();
 			if(token){
 				store.modalLoading = true;
-				let {  name, address } = this.props.form.getFieldsValue();
+				let {  name, address } = form.getFieldsValue();
 				let { logo } = store;
 				let dealLogo = logo.replace(/^data:.*base64,/, '');
-				axios.post('/api/v1/bank/save', {
+				let params = {
 					name,
-					address,
-					logo: dealLogo
-				}, {headers: {token}})
-					.then(res => {
-						let { id } = res.data;
-						store.bank_list.push({
-							id,
-							name,
-							address,
-							logo,
-							state: 1
+					address
+				};
+				if(this.props.selectItem){//更新
+					let isChangeLogo = /^data:.*base64,/.test(logo);//判断有没有修改logo
+					if(isChangeLogo){
+						params.logo = dealLogo;
+					}
+					params.id = selectItem.id;
+					axios.post('/api/v1/bank/update', params, {
+						headers: {
+							token
+						}
+					})
+						.then(res => {
+							this.closeModal();
+						})
+						.catch(res => {
+							store.modalLoading = false;
+							message.error(res.data.msg);
 						});
-						this.closeModal();
-					})
-					.catch(res => {
-						store.modalLoading = false;
-						message.error(res.data.msg);
-					})
+				}else{
+					params.logo = dealLogo;
+					axios.post('/api/v1/bank/save', params, {headers: {token}})
+						.then(res => {
+							this.closeModal();
+						})
+						.catch(res => {
+							store.modalLoading = false;
+							message.error(res.data.msg);
+						})
+				}
 			}
 		}
 	};
@@ -113,29 +156,37 @@ class AddBank extends Component{
 		store.visible = false;
 		store.logo = '';
 		store.modalLoading = false;
+		store.selectItem = null;
 	}
 }
 const AddBankWithForm = Form.create()(AddBank);
 @observer
 class BankConfig extends Component{
+	page = 1;
 	render(){
-		let { visible, bank_list, tableLoading, total } = store;
+		let { visible, bank_list, tableLoading, total, selectItem } = store;
 		let dataSource = Array.from(bank_list);
+		let current = this.page;
 		return (
 			<React.Fragment>
 				<div style={{paddingBottom: '24px', textAlign: 'right'}}>
 					<Button type='primary' onClick={this.openModal}>新增</Button>
 				</div>
-				<Table columns={this.columns} dataSource={dataSource} rowKey='id' loading={tableLoading} pagination={total > SIZE ? {total, onChange: page => this.getBankList(page)} : false }/>
-				<AddBankWithForm visible={visible}/>
+				<Table columns={this.columns} dataSource={dataSource} rowKey='id' loading={tableLoading} pagination={total > SIZE ? {total, pageSize: SIZE, current, onChange: page => this.getBankList(page)} : false }/>
+				<AddBankWithForm visible={visible} selectItem={selectItem}/>
 			</React.Fragment>
 		)
 	}
 	componentDidMount(){
-		this.getBankList();
+		autorun(() => {
+			if(!store.visible){
+				this.getBankList();
+			}
+		});
 	}
 	getBankList = (page = 1) => {
 		let token = getToken();
+		this.page = page;
 		if(token){
 			store.tableLoading = true;
 			axios.get('/api/v1/cms/banks', {
@@ -162,6 +213,10 @@ class BankConfig extends Component{
 
 	openModal = () => {
 		store.visible = true;
+	};
+	editBank = record => {
+		this.openModal();
+		store.selectItem = record;
 	};
 	bindAdmin = id => {
 		history.push(`/bank/bind/${id}`);
@@ -216,6 +271,10 @@ class BankConfig extends Component{
 		title: 'ID',
 		dataIndex: 'id'
 	}, {
+		key: 'order',
+		title: '顺序',
+		dataIndex: 'order'
+	}, {
 		key: 'logo',
 		title: 'logo',
 		dataIndex: 'logo',
@@ -237,6 +296,7 @@ class BankConfig extends Component{
 		title: '操作',
 		render: (text, record) => (
 			<div className={multipleClass(styles, 'operate')}>
+				<a onClick={() => this.editBank(record)}>编辑</a>
 				{/*
 				1表示启用中
 				2表示已停用

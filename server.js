@@ -22,11 +22,11 @@ app.use(staticCache(join(__dirname, 'build'), {
 	prefix: '/build/'
 }, files));
 app.use(staticCache(join(__dirname, 'static-build'), {
-	prefix: '/build/',
+	prefix: '/build/static',
 	maxAge: 0
-}));
+}, files));
 for (let file in files){
-	if(/\.html$/.test(file)){
+	if(/\.html$/.test(file) || /^[\\\/]build[\\\/]static/.test(file)){
 		files[file].maxAge = 0;
 	}
 }

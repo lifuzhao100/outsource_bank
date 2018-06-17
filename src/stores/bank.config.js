@@ -6,5 +6,6 @@ class Store {
 	@observable tableLoading = false;
 	@observable modalLoading = false;
 	@observable logo;
+	@observable selectItem = null;
 }
 export default new Store();

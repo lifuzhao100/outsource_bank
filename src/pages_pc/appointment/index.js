@@ -20,11 +20,13 @@ class Appointment extends Component{
 			moment()
 		];
 	}
+	page = 1;
 	render(){
 		let { total, bank_list, appointment_list } = store;
 		let bankList = Array.from(bank_list);
 		let dataSource= Array.from(appointment_list);
 		let { getFieldDecorator } = this.props.form;
+		let current = this.page;
 		return (
 			<React.Fragment>
 				<Form layout='inline' className={multipleClass(styles, 'flex space-between select-bar')}>
@@ -50,7 +52,7 @@ class Appointment extends Component{
 						<RangePicker allowClear={false} onChange={() => this.getAppointmentList()}/>
 					)}</Form.Item>
 				</Form>
-				<Table columns={this.columns} dataSource={dataSource} pagination={total > SIZE ? { total,pageSize: SIZE, onChange: page => this.getAppointmentList(page)} : false}/>
+				<Table columns={this.columns} dataSource={dataSource} pagination={total > SIZE ? { total,pageSize: SIZE, current, onChange: page => this.getAppointmentList(page)} : false}/>
 			</React.Fragment>
 		)
 	}
@@ -62,6 +64,7 @@ class Appointment extends Component{
 		let {bank_id, key, dates} = this.props.form.getFieldsValue();
 		let [time_begin, time_end] = dates;
 		let token = getToken();
+		this.page = page;
 		if(token){
 			axios.get('/api/v1/orders/cms', {
 				params: {
@@ -90,7 +93,7 @@ class Appointment extends Component{
 		axios.get('/api/v1/cms/banks', {
 			params: {
 				page: 1,
-				size: 1000
+				size: 1000//使用了或者银行卡列表的接口，只能写死1000条来尽量获取大量数据，在数据超过1000条之后再做优化
 			}
 		})
 			.then(res => {
