@@ -11,7 +11,8 @@ module.exports = {
 	context: resolve(root, 'src'),
 	entry: {
 		'pc/index': './index.pc.js',
-		'mobile/index': './index.mobile.js'
+		'mobile/index': './index.mobile.js',
+		test: './test.js'
 	},
 	output: {
 		filename: 'scripts/[id]_[hash].js',
@@ -123,6 +124,12 @@ module.exports = {
 			template: './index.mobile.html',
 			inject: 'body',
 			chunks: ['vendor','mobile/index'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: './test.html',
+			inject: 'body',
+			chunks: ['test'],
 		})
 	]
 };
