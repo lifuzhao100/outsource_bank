@@ -44,12 +44,12 @@ class AppointmentNew extends Component{
 						<React.Fragment>
 							<InputItem placeholder={`请输入企业名称`} onChange={val => store.name = val}>企业名称</InputItem>
 							<InputItem placeholder={`请输入企业营业执照`} onChange={val => store.identity = val}>企业营业执照</InputItem>
+							<InputItem placeholder={`请输入企业联系人姓名`}  onChange={val => store.name_sub = val}>联系人</InputItem>
 						</React.Fragment>
 						:
 						<React.Fragment>
 							<InputItem placeholder={`请输入姓名`} onChange={val => store.name = val}>姓名</InputItem>
 							<InputItem placeholder={`请输入身份证号`} onChange={val => store.identity = val}>身份证号</InputItem>
-							<InputItem placeholder={`请输入企业联系人姓名`}  onChange={val => store.name_sub = val}>联系人</InputItem>
 						</React.Fragment>
 					}
 					<InputItem placeholder='请输入手机号' type='phone' onChange={val => store.inputPhone = val}>手机号</InputItem>
