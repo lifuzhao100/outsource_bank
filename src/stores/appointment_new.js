@@ -20,14 +20,10 @@ class Store {
 		if(this.service_type.length > 0 && this.service_type[0].indexOf('对公')){//含有对公两个字即为对公
 			return {
 				type: '对公',//分为个人和对公账户
-				name: '企业名称',
-				identity_name: '企业营业执照'
 			}
 		}
 		return {
 			type: '个人',//分为个人和对公账户
-			name: '姓名',
-			identity_name: '身份证号'
 		}
 	}
 	@computed get phone(){
