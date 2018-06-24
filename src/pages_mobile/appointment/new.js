@@ -11,7 +11,7 @@ import {getWxToken} from "../../helpers/fresh_token";
 @observer
 class AppointmentNew extends Component{
 	render(){
-		let { showMoney, date, bank_list, selected_bank, disableBtn } = store;
+		let { showMoney, date, bank_list, selected_bank, disableBtn, init } = store;
 		let bankList = Array.from(bank_list);
 		let selectedBank = Array.from(selected_bank);
 		let selectSex = Array.from(store.selectSex);
@@ -24,25 +24,6 @@ class AppointmentNew extends Component{
 			<div>
 				<h3 className={multipleClass(styles, 'header')}>填写预约信息</h3>
 				<List>
-					<InputItem placeholder='请输入姓名' onChange={val => store.name = val}>姓名</InputItem>
-					<InputItem placeholder='请输入手机号' type='phone' onChange={val => store.inputPhone = val}>手机号</InputItem>
-					<InputItem placeholder='请输入身份证号' onChange={val => store.identity = val}>身份证号</InputItem>
-					<Picker
-						data={this.sexList}
-						value={selectSex}
-						cols={1}
-						onOk={this.pickSex}
-					>
-						<List.Item arrow='horizontal'>性别</List.Item>
-					</Picker>
-					<Picker
-						data={bankList}
-						value={selectedBank}
-						cols={1}
-						onOk={this.pickBank}
-					>
-						<List.Item arrow='horizontal'>预约银行</List.Item>
-					</Picker>
 					<Picker
 						data={serviceTypeList}
 						value={serviceType}
@@ -58,6 +39,26 @@ class AppointmentNew extends Component{
 						onOk={this.pickServiceContent}
 					>
 						<List.Item arrow='horizontal'>服务内容</List.Item>
+					</Picker>
+					<InputItem placeholder={`请输入${init.name}`} onChange={val => store.name = val}>{init.name}</InputItem>
+					<InputItem placeholder={`请输入${init.identity_name}`} onChange={val => store.identity = val}>{init.identity_name}</InputItem>
+					{init.type === '对公' ? <InputItem  onChange={val => store.name_sub = val}>联系人</InputItem> : null}
+					<InputItem placeholder='请输入手机号' type='phone' onChange={val => store.inputPhone = val}>手机号</InputItem>
+					<Picker
+						data={this.sexList}
+						value={selectSex}
+						cols={1}
+						onOk={this.pickSex}
+					>
+						<List.Item arrow='horizontal'>性别</List.Item>
+					</Picker>
+					<Picker
+						data={bankList}
+						value={selectedBank}
+						cols={1}
+						onOk={this.pickBank}
+					>
+						<List.Item arrow='horizontal'>预约银行</List.Item>
 					</Picker>
 					{showMoney ? <InputItem placeholder='请输入预约金额' type='money' moneyKeyboardAlign='left' onChange={val => store.money = val}>预约金额</InputItem> : null}
 				</List>
@@ -177,13 +178,16 @@ class AppointmentNew extends Component{
 		store.date = date;
 	};
 	confirm = () => {
-		let { disableBtn, name, phone, identity, sex, service, service_item, bank_id, day, money,showMoney } = store;
+		let { disableBtn, name, phone, identity, sex, service, service_item, bank_id, day, money,showMoney, name_sub } = store;
 		if(!disableBtn){
 			let params = {
 				name, phone, identity, sex, service, service_item, bank_id, day
 			};
 			if(showMoney) {
 				params.money = money;
+			}
+			if(name_sub){
+				params.name_sub = name_sub;
 			}
 			Toast.loading('提交中，请稍后...', 30);
 			axios.post('/api/v1/order/save', params)
