@@ -43,7 +43,7 @@ class AppointmentNew extends Component{
 					{init.type === '对公' ?
 						<React.Fragment>
 							<InputItem placeholder={`请输入企业名称`} onChange={val => store.name = val}>企业名称</InputItem>
-							<InputItem placeholder={`请输入企业营业执照`} onChange={val => store.identity = val}>企业营业执照</InputItem>
+							<InputItem placeholder='请输入15位或18位的社会信用代码' onChange={val => store.identity = val}>营业执照号</InputItem>
 							<InputItem placeholder={`请输入企业联系人姓名`}  onChange={val => store.name_sub = val}>联系人</InputItem>
 						</React.Fragment>
 						:
