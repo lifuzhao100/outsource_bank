@@ -7,7 +7,7 @@ import store from '../../stores/appointment_new';
 import getMinMaxDateTime from '../../helpers/get_min_max_date_time';
 import axios from 'axios';
 import history from '../../history';
-import {getWxToken} from "../../helpers/fresh_token";
+import { getWxToken } from "../../helpers/fresh_token";
 @observer
 class AppointmentNew extends Component{
 	render(){
