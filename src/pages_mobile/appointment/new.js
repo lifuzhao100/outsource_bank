@@ -3,15 +3,37 @@ import styles from '../../less/appointment_new.less';
 import multipleClass from '../../helpers/multiple_class';
 import { List, InputItem, Picker, DatePicker, Button, WingBlank, Toast } from 'antd-mobile';
 import { observer } from 'mobx-react';
+import { autorun } from 'mobx';
 import store from '../../stores/appointment_new';
-import getMinMaxDateTime from '../../helpers/get_min_max_date_time';
+import { getMinMaxTime, getMinMaxDate } from '../../helpers/get_min_max_date_time';
 import axios from 'axios';
 import history from '../../history';
 import { getWxToken } from "../../helpers/fresh_token";
 @observer
 class AppointmentNew extends Component{
+	constructor(props){
+		super(props);
+		store.minMaxDate = getMinMaxDate();
+	}
+	componentDidMount(){
+		this.getServiceList();
+		this.getBankList();
+		this.autorunHandler = autorun(() => {
+			let { date } = store;
+			if(date){
+				let {defaultDate, ...minMaxTime} = getMinMaxTime(date);
+				store.minMaxTime = minMaxTime;
+				console.log(defaultDate);
+				store.time = defaultDate;
+			}
+			
+		});
+	}
+	componentWillUnmount(){
+		this.autorunHandler();
+	}
 	render(){
-		let { showMoney, date, bank_list, selected_bank, disableBtn, init } = store;
+		let { showMoney, date, time, bank_list, selected_bank, disableBtn, init, minMaxDate, minMaxTime } = store;
 		let bankList = Array.from(bank_list);
 		let selectedBank = Array.from(selected_bank);
 		let selectSex = Array.from(store.selectSex);
@@ -19,11 +41,10 @@ class AppointmentNew extends Component{
 		let serviceType = Array.from(store.service_type);
 		let serviceContentList = Array.from(store.service_content_list);
 		let serviceContent = Array.from(store.service_content);
-		let minMaxDate = getMinMaxDateTime();
 		return (
 			<div>
 				<h3 className={multipleClass(styles, 'header')}>填写预约信息</h3>
-				<List>
+				<List >
 					<Picker
 						data={serviceTypeList}
 						value={serviceType}
@@ -71,13 +92,21 @@ class AppointmentNew extends Component{
 					</Picker>
 					{showMoney ? <InputItem placeholder='请输入预约金额' type='money' moneyKeyboardAlign='left' onChange={val => store.money = val}>预约金额</InputItem> : null}
 				</List>
-				<List style={{marginTop: '24px'}}>
+				<List renderHeader={() => '预约受理时间:08:00~15:00'}>
 					<DatePicker
-						mode='datetime'
-						minuteStep={30}
-						{...minMaxDate}
+						mode='date'
 						onChange={this.handleDate}
+						{...minMaxDate}
 						value={date}
+					>
+						<List.Item arrow='horizontal'>预约日期</List.Item>
+					</DatePicker>
+					<DatePicker
+						mode='time'
+						minuteStep={30}
+						{...minMaxTime}
+						onChange={this.handleTime}
+						value={time}
 					>
 						<List.Item arrow='horizontal'>预约时间</List.Item>
 					</DatePicker>
@@ -88,11 +117,8 @@ class AppointmentNew extends Component{
 			</div>
 		)
 	}
-	componentDidMount(){
-		this.getServiceList();
-		this.getBankList();
-	}
 	getServiceList = () => {
+		
 		axios.get('/api/v1/service/services')
 			.then(res => {
 				let resData = res.data;
@@ -120,6 +146,7 @@ class AppointmentNew extends Component{
 			})
 	};
 	getBankList = () => {
+		
 		axios.get('/api/v1/banks')
 			.then(res => {
 				let resData = res.data;
@@ -186,6 +213,9 @@ class AppointmentNew extends Component{
 	handleDate = date => {
 		store.date = date;
 	};
+	handleTime = (time) => {
+		store.time = time;
+	}
 	confirm = () => {
 		let { disableBtn, name, phone, identity, sex, service, service_item, bank_id, day, money,showMoney, name_sub } = store;
 		if(!disableBtn){

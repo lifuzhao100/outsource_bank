@@ -11,11 +11,14 @@ class Store {
 	@observable service_content = [];
 	@observable showMoney = false;
 	@observable date = null;
+	@observable time = null;
 	@observable name;
 	@observable inputPhone;
 	@observable identity;
 	@observable money;
 	@observable name_sub;
+	@observable minMaxDate = {};
+	@observable minMaxTime = {};
 	@computed get init(){
 		if(this.service_type.length > 0 && this.service_type[0].indexOf('对公') !== -1){//含有对公两个字即为对公
 			return {
@@ -42,7 +45,11 @@ class Store {
 		return this.service_content && this.service_content[0];
 	}
 	@computed get day (){
-		if(this.date) return moment(this.date).format('YYYY-MM-DD HH:mm');
+		if(this.date && this.time) {
+			let date = moment(this.date).format('YYYY-MM-DD'),
+				time = moment(this.time).format('HH:mm');
+			return moment(date + ' ' + time, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm');
+		}
 		return null;
 	}
 	@computed get disableBtn(){
