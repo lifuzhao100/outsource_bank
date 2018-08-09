@@ -10,6 +10,7 @@ import bottomImg from '../../imgs/bottom.png';
 import eBankImg from '../../imgs/e_bank.png';
 import bankBookImg from '../../imgs/bank_book.png';
 import companyImg from '../../imgs/company.png';
+console.log(styles);
 @observer
 class Index extends Component{
 	constructor(props){

@@ -22,9 +22,9 @@ class AppointmentNew extends Component{
 		this.getServiceList();
 		this.getBankList();
 		this.autorunHandler = autorun(() => {
-			let { date } = store;
+			let { date, time_begin, time_end } = store;
 			if(date){
-				let {defaultDate, ...minMaxTime} = getMinMaxTime(date);
+				let {defaultDate, ...minMaxTime} = getMinMaxTime(date, time_begin, time_end);
 				store.minMaxTime = minMaxTime;
 				store.time = defaultDate;
 			}
@@ -131,7 +131,7 @@ class AppointmentNew extends Component{
 						onChange={this.handleRemark}
 					/>
 				</List>
-				<WingBlank style={{marginTop: 48}}>
+				<WingBlank style={{marginTop: 48, marginBottom: 48}}>
 					<Button type='primary' disabled={disableBtn} onClick={this.confirm}>提交预约申请</Button>
 				</WingBlank>
 			</div>

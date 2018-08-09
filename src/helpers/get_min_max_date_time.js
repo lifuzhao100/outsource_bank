@@ -15,16 +15,20 @@ let getMinMaxDateTime = () => {
 	}
 };
 
-let getMinMaxTime = date => {
+let getMinMaxTime = (date, time_begin, time_end) => {
 	let now = moment(),
 		nowString = now.format('YYYY-MM-DD'),
 		dateString = moment(date).format('YYYY-MM-DD'),
 		minTime,
-		maxTime;
+		maxTime,
+		startHour = time_begin.hour(),
+		startMinute = time_begin.minute(),
+		endHour = time_end.hour(),
+		endMinute = time_end.minute();
 	if(dateString === nowString){
 		if(now.hour() < 8 ){
-			minTime = moment().hour(8).minute(0);
-			maxTime = moment().hour(15).minute(0);
+			minTime = moment().hour(startHour).minute(startMinute);
+			maxTime = moment().hour(endHour).minute(endMinute);
 		}else{
 			if(moment().minute() > 30){
 				minTime = moment().add(1, 'h').minute(0);
@@ -39,9 +43,10 @@ let getMinMaxTime = date => {
 		// }else{
 		// 	minTime = moment().minute(30);
 		// }
-		minTime = moment('08:00', 'HH:mm');
+		// minTime = moment('08:00', 'HH:mm');
+		minTime = time_begin;
 	}
-	maxTime = moment().hour(15).minute(0);
+	maxTime = moment().hour(endHour).minute(endMinute);
 	return {
 		minDate: minTime.toDate(),
 		maxDate: maxTime.toDate(),
