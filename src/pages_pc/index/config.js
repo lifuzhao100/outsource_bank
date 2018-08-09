@@ -20,7 +20,7 @@ class AddIndex extends Component{
 	render(){
 		let { modalLoading, selectItem, logo } = store;
 		let { visible, form, editType } = this.props;
-		let { getFieldDecorator, getFieldsValue } = form;
+		let { getFieldDecorator, getFieldsValue, isFieldTouched } = form;
 		let inits = {
 			logo: '',
 			url: '',
@@ -32,14 +32,19 @@ class AddIndex extends Component{
 			inits.logo = selectItem.logo;
 			inits.url = selectItem.url;
 			inits.type = '' + selectItem.type;
-			let index_type = selectItem.index_type || '1'
+			let index_type = selectItem.index_type || '';
 			inits.index_type = '' + index_type;
 			disabledRadio = true;
 		}
 		if(!logo){
 			logo = inits.logo;
 		}
-		let showIndexType = getFieldsValue(['type']).type === module_key;
+		let showIndexType;
+		if(isFieldTouched('type')){
+			showIndexType = getFieldsValue(['type']).type === module_key;
+		}else{
+			showIndexType = inits.type === module_key;
+		}
 		return (
 			<Modal width={800} visible={visible} destroyOnClose={true} confirmLoading={modalLoading} onCancel={this.closeModal} cancelText='取消' onOk={this.confirm} okText='确认' title={<p className={multipleClass(modalStyle, 'modal-title')}>新建首页<small>上传首页图片和链接</small></p>}>
 				<Form>
@@ -115,6 +120,7 @@ class AddIndex extends Component{
 	confirm = () => {
 		this.props.form.validateFields();
 		let errors = this.props.form.getFieldsError();
+		console.log(errors);
 		if(!haveError(errors)){
 			let { url, type, index_type } = this.props.form.getFieldsValue();
 			let { logo, selectItem } = store;
