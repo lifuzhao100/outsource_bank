@@ -25,6 +25,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		startMinute = time_begin.minute(),
 		endHour = time_end.hour(),
 		endMinute = time_end.minute();
+	console.log(time_begin, time_end);
 	if(dateString === nowString){
 		if(now.hour() < startHour ){
 			minTime = time_begin;
