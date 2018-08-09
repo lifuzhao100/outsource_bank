@@ -16,7 +16,7 @@ import moment from 'moment';
 class AddNEditService extends Component{
 	render(){
 		let { visible, form, editType } = this.props;
-		let { getFieldDecorator, getFieldsValue } = form;
+		let { getFieldDecorator, getFieldsValue, isFieldTouched } = form;
 		let { editItem, modalLoading, time_begin, time_end } = store;
 		let inits = {
 			time_begin: time_begin,
@@ -32,11 +32,16 @@ class AddNEditService extends Component{
 			inits.money = '' + editItem.money;
 			inits.category = editItem.category;
 			inits.item = editItem.item.join('/');
-			inits.money_type = '' + editItem.money_type;
+			let money_type = editItem.money_type ? '' + editItem.money_type : '1';
+			inits.money_type = money_type;
 		}
-		let money = getFieldsValue(['money']).money || inits.money;
+		let money;
+		if(isFieldTouched('money')){
+			money = getFieldsValue(['money']).money;
+		}else{
+			money = inits.money;
+		}
 		let showMoneyType =  money === '1';
-
 		return (
 			<Modal
 				confirmLoading={modalLoading}
