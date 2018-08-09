@@ -276,7 +276,7 @@ class AppointmentNew extends Component{
 					if(money.checked) return true;
 					return false;
 				});
-				params.denomination = denominations.join(',');
+				params.denomination = denominations.map(deno => deno.value).join(',');
 			}
 			params.remark = remark || '';
 			Toast.loading('提交中，请稍后...', 30);
