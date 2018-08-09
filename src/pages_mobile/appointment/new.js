@@ -10,11 +10,13 @@ import { getMinMaxTime, getMinMaxDate } from '../../helpers/get_min_max_date_tim
 import axios from 'axios';
 import history from '../../history';
 import { getWxToken } from "../../helpers/fresh_token";
+import moment from 'moment';
 @observer
 class AppointmentNew extends Component{
 	constructor(props){
 		super(props);
-		store.minMaxDate = getMinMaxDate();
+		let { time_begin, time_end } = store;
+		store.minMaxDate = getMinMaxDate(time_begin, time_end);
 	}
 	componentDidMount(){
 		this.getServiceList();
@@ -33,7 +35,7 @@ class AppointmentNew extends Component{
 		this.autorunHandler();
 	}
 	render(){
-		let { showMoney, showMoneyType, date, time, bank_list, selected_bank, disableBtn, init, minMaxDate, minMaxTime, money_type_list } = store;
+		let { showMoney, showMoneyType, date, time, bank_list, selected_bank, disableBtn, init, minMaxDate, minMaxTime, money_type_list, time_begin, time_end } = store;
 		let bankList = Array.from(bank_list);
 		let selectedBank = Array.from(selected_bank);
 		let selectSex = Array.from(store.selectSex);
@@ -103,7 +105,7 @@ class AppointmentNew extends Component{
 						</List>
 					) : null }
 				</List>
-				<List renderHeader={() => '预约受理时间:08:00~15:00'}>
+				<List renderHeader={() => `预约受理时间: ${time_begin.format('mm:ss')} ~ ${time_end.format('mm:ss')}`}>
 					<DatePicker
 						mode='date'
 						onChange={this.handleDate}
@@ -232,7 +234,12 @@ class AppointmentNew extends Component{
 						label: it,
 						value: it
 					}
-				})
+				});
+				let time_begin = type.time_begin || '08:00:00';
+				let time_end = type.time_end || '15:00';
+				store.time_begin = moment(time_begin, 'mm:ss:SS');
+				store.time_end = moment(time_end, 'mm:ss:SS');
+				store.minMaxDate = getMinMaxDate(store.time_begin, store.time_end);
 			}
 		});
 		store.service_content_list = item;

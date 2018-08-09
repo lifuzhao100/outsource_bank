@@ -1,4 +1,5 @@
 import { observable, computed } from 'mobx';
+import moment from 'moment';
 class Store {
 	@observable money_type_list = [{
 		checked: false,
@@ -35,6 +36,8 @@ class Store {
 	@observable money;
 	@observable remark = '';
 	@observable name_sub;
+	@observable time_begin = moment('08:00');
+	@observable time_end = moment('15:00');
 	@observable minMaxDate = {};
 	@observable minMaxTime = {};
 	@computed get init(){
