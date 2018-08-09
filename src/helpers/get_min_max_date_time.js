@@ -47,6 +47,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		minTime = time_begin;
 	}
 	maxTime = time_end;
+	console.log(minTime, maxTIme);
 	return {
 		minDate: minTime.toDate(),
 		maxDate: maxTime.toDate(),
