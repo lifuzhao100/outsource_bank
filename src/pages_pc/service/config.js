@@ -62,7 +62,7 @@ class AddNEditService extends Component{
 						}]
 					})(
 						<React.Fragment>
-							<TimePicker allowEmpty={false} format='mm:ss' defaultValue={inits.time_begin}/> - <TimePicker format='mm:ss' allowEmpty={false} defaultValue={inits.time_end}/>
+							<TimePicker onChange={time => store.time_begin = time} allowEmpty={false} format='mm:ss' defaultValue={inits.time_begin}/> - <TimePicker format='mm:ss' allowEmpty={false} defaultValue={inits.time_end} onChange={time => store.time_end = time}/>
 						</React.Fragment>
 					)}</Form.Item>
 					<Form.Item label='预约金额' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('money', {

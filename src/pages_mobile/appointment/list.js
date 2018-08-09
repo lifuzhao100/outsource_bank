@@ -20,7 +20,7 @@ class AppointmentList extends Component{
 		store.appointment_list = [];
 		let param = getParam();
 		if(param.day){
-			store.date = new Date(param.day);
+			store.date = moment(param.day, 'YYYY-MM-DD mm:ss').toDate();
 		}
 		if(param.grade){
 			store.grade = param.grade;
@@ -139,7 +139,7 @@ class AppointmentList extends Component{
 		let params = {
 			page,
 			size: SIZE,
-			day: day
+			day: moment(day).format('YYYY-MM-DD')
 		};
 		if(grade){
 			params.grade = grade;

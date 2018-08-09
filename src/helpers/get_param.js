@@ -8,7 +8,7 @@ let getParam = () => {
 			let paramArr = p.split('=');
 			if(paramArr.length === 2){
 				let key = paramArr[0];
-				let value = paramArr[1];
+				let value = decodeURIComponent(paramArr[1]);
 				if(paramsObj[key]){
 					paramsObj[key] = [value].concat(paramsObj[key]);
 				}else{
