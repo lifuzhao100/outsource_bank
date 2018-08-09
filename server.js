@@ -23,6 +23,7 @@ app.use(staticCache(join(__dirname, 'build'), {
 }, files));
 app.use(staticCache(join(__dirname, 'static-build'), {
 	prefix: '/build/static',
+	gzip: true,
 	maxAge: 0
 }, files));
 for (let file in files){
