@@ -27,7 +27,7 @@ class Store {
 	@observable service_content_list = [];
 	@observable service_content = [];
 	@observable showMoney = false;
-	@observable showMoneyType = true;
+	@observable showMoneyType = false;
 	@observable date = null;
 	@observable time = null;
 	@observable name;
