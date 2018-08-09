@@ -1,5 +1,21 @@
 import { observable, computed } from 'mobx';
 class Store {
+	@observable money_type_list = [{
+		checked: false,
+		value: '5角'
+	}, {
+		checked: false,
+		value: '1元'
+	}, {
+		checked: false,
+		value: '5元'
+	}, {
+		checked: false,
+		value: '10元'
+	}, {
+		checked: false,
+		value: '20元'
+	}];
 	@observable selectSex = [];
 	// @observable origin_bank_list = [];
 	@observable bank_list = [];
@@ -10,12 +26,14 @@ class Store {
 	@observable service_content_list = [];
 	@observable service_content = [];
 	@observable showMoney = false;
+	@observable showMoneyType = true;
 	@observable date = null;
 	@observable time = null;
 	@observable name;
 	@observable inputPhone;
 	@observable identity;
 	@observable money;
+	@observable remark = '';
 	@observable name_sub;
 	@observable minMaxDate = {};
 	@observable minMaxTime = {};
@@ -55,6 +73,9 @@ class Store {
 	@computed get disableBtn(){
 		if(this.init.type === '对公'){
 			if(!this.name_sub) return true;
+		}
+		if(this.showMoneyType){
+			if(!Array.from(this.money_type_list).some(moneyType => !!moneyType.checked)) return true;
 		}
 		return !this.name || !this.phone || !this.identity || !this.sex || !this.bank_id || !this.service || !this.service_item || !this.day || (this.showMoney && !this.money);
 	}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { WingBlank, Grid, Carousel, Drawer, List } from 'antd-mobile';
-import head from '../../imgs/head.png';
 import styles from '../../less/index.mobile.less';
 import multipleClass from '../../helpers/multiple_class';
 import { observer } from 'mobx-react';
@@ -8,6 +7,9 @@ import store from '../../stores/index_index';
 import axios from 'axios';
 import { getWxToken } from '../../helpers/fresh_token';
 import bottomImg from '../../imgs/bottom.png';
+import eBankImg from '../../imgs/e_bank.png';
+import bankBookImg from '../../imgs/bank_book.png';
+import companyImg from '../../imgs/company.png';
 @observer
 class Index extends Component{
 	constructor(props){
@@ -18,10 +20,12 @@ class Index extends Component{
 		store.open = false;
 	}
 	render(){
-		let { locationFail, distance_list,carousel_list, open } = store;
-		let list = Array.from(store.index_list);
+		let { locationFail, distance_list,carousel_list, open, e_bank_list, bank_book_list, company_list } = store;
 		let carouselList = Array.from(carousel_list);
 		let distanceList = Array.from(distance_list);
+		const eBankList = Array.from(e_bank_list),
+			bankBookList = Array.from(bank_book_list),
+			companyList = Array.from(company_list);
 		const sidebar = (<List className={multipleClass(styles, 'bank-list')}>
 			{distanceList.map((distance, index) => {
 				return (
@@ -45,11 +49,39 @@ class Index extends Component{
 					</Carousel>
 					<section className={multipleClass(styles, 'grid-section')}>
 						<h3>
-							<img src={head} style={{width: '100%'}}/>
+							<img src={eBankImg} style={{width: '100%'}}/>
 						</h3>
 						<Grid
 							columnNum={3}
-							data={list}
+							data={eBankList}
+							renderItem={dataItem => (
+								<a href={dataItem.url}>
+									<img src={dataItem.logo} style={{width: '100%'}}/>
+								</a>
+							)}
+						/>
+					</section>
+					<section className={multipleClass(styles, 'grid-section')}>
+						<h3>
+							<img src={bankBookImg} style={{width: '100%'}}/>
+						</h3>
+						<Grid
+							columnNum={3}
+							data={bankBookList}
+							renderItem={dataItem => (
+								<a href={dataItem.url}>
+									<img src={dataItem.logo} style={{width: '100%'}}/>
+								</a>
+							)}
+						/>
+					</section>
+					<section className={multipleClass(styles, 'grid-section')}>
+						<h3>
+							<img src={companyImg} style={{width: '100%'}}/>
+						</h3>
+						<Grid
+							columnNum={3}
+							data={companyList}
 							renderItem={dataItem => (
 								<a href={dataItem.url}>
 									<img src={dataItem.logo} style={{width: '100%'}}/>
@@ -248,7 +280,22 @@ class Index extends Component{
 		})
 			.then(res => {
 				let resData = res.data;
-				store.index_list = resData;
+				let eBankList = [],
+					bankBookList = [],
+					companyList = [];
+				resData.forEach(item => {
+					if(item.index_type === 1){
+						eBankList.push(item);
+					}else if(item.index_type === 2){
+						bankBookList.push(item);
+					}else if(item.index_type === 3){
+						companyList.push(item);
+					}
+				});
+				store.e_bank_list = eBankList;
+				store.bank_book_list = bankBookList;
+				store.company_list = companyList;
+				// store.index_list = resData;
 			})
 			.catch(res => {
 				let resData = res.data;

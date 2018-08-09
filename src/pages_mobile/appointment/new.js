@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../../less/appointment_new.less';
 import multipleClass from '../../helpers/multiple_class';
-import { List, InputItem, Picker, DatePicker, Button, WingBlank, Toast } from 'antd-mobile';
+import { List, InputItem, Picker, DatePicker, Button, WingBlank, Toast, Checkbox, TextareaItem } from 'antd-mobile';
+const CheckboxItem = Checkbox.CheckboxItem;
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
 import store from '../../stores/appointment_new';
@@ -23,7 +24,6 @@ class AppointmentNew extends Component{
 			if(date){
 				let {defaultDate, ...minMaxTime} = getMinMaxTime(date);
 				store.minMaxTime = minMaxTime;
-				console.log(defaultDate);
 				store.time = defaultDate;
 			}
 			
@@ -33,7 +33,7 @@ class AppointmentNew extends Component{
 		this.autorunHandler();
 	}
 	render(){
-		let { showMoney, date, time, bank_list, selected_bank, disableBtn, init, minMaxDate, minMaxTime } = store;
+		let { showMoney, showMoneyType, date, time, bank_list, selected_bank, disableBtn, init, minMaxDate, minMaxTime, money_type_list } = store;
 		let bankList = Array.from(bank_list);
 		let selectedBank = Array.from(selected_bank);
 		let selectSex = Array.from(store.selectSex);
@@ -41,6 +41,7 @@ class AppointmentNew extends Component{
 		let serviceType = Array.from(store.service_type);
 		let serviceContentList = Array.from(store.service_content_list);
 		let serviceContent = Array.from(store.service_content);
+		let moneyTypeList = Array.from(money_type_list);
 		return (
 			<div>
 				<h3 className={multipleClass(styles, 'header')}>填写预约信息</h3>
@@ -91,6 +92,16 @@ class AppointmentNew extends Component{
 						<List.Item arrow='horizontal'>预约银行</List.Item>
 					</Picker>
 					{showMoney ? <InputItem placeholder='请输入预约金额' type='money' moneyKeyboardAlign='left' onChange={val => store.money = val}>预约金额</InputItem> : null}
+					{ showMoneyType ? (
+						<List className='show_money_type'>
+							<div style={{width: '29.1%', fontSize: 17,paddingLeft: 15, display:'flex', alignItems: 'center'}}>预约面额</div>
+							{ moneyTypeList.map(money => 
+								<CheckboxItem key={money.value} defaultChecked={money.checked} style={{width: '29.1%'}} onChange={() => this.selectMoneyType(money)}>
+									{money.value}
+								</CheckboxItem>
+							)}
+						</List>
+					) : null }
 				</List>
 				<List renderHeader={() => '预约受理时间:08:00~15:00'}>
 					<DatePicker
@@ -110,6 +121,13 @@ class AppointmentNew extends Component{
 					>
 						<List.Item arrow='horizontal'>预约时间</List.Item>
 					</DatePicker>
+					<TextareaItem 
+						title='备注'
+						placeholder="填写备注的信息，文字不得超过30字"
+						autoHeight
+						count={30}
+						onChange={this.handleRemark}
+					/>
 				</List>
 				<WingBlank style={{marginTop: 48}}>
 					<Button type='primary' disabled={disableBtn} onClick={this.confirm}>提交预约申请</Button>
@@ -180,6 +198,16 @@ class AppointmentNew extends Component{
 		label: '女',
 		value: '2'
 	}];
+
+	selectMoneyType = (money_type) => {
+		let moneyTypeList = Array.from(store.money_type_list);
+		moneyTypeList.forEach(moneyType => {
+			if(money_type.value === moneyType.value){
+				moneyType.checked = !moneyType.checked;
+			}
+		});
+		store.money_type_list = moneyTypeList;
+	};
 	pickSex = (sex) => {
 		store.selectSex = sex;
 	};
@@ -190,10 +218,14 @@ class AppointmentNew extends Component{
 		store.service_type = value;
 		let item = [];
 		let showMoney = false;
+		let showMoneyType = false;
 		Array.from(store.origin_service_type_list).forEach(type => {
 			if(type.category === value[0]){
 				if(type.money === 1){
 					showMoney = true;
+				}
+				if(type.money_type === 2){
+					showMoneyType = true;
 				}
 				item = type.item.map(it => {
 					return {
@@ -206,6 +238,7 @@ class AppointmentNew extends Component{
 		store.service_content_list = item;
 		store.service_content = [];
 		store.showMoney = showMoney;
+		store.showMoneyType = showMoneyType;
 	};
 	pickServiceContent = (value) => {
 		store.service_content = value;
@@ -216,11 +249,14 @@ class AppointmentNew extends Component{
 	handleTime = (time) => {
 		store.time = time;
 	}
+	handleRemark = val => {
+		store.remark = val;
+	}
 	confirm = () => {
-		let { disableBtn, name, phone, identity, sex, service, service_item, bank_id, day, money,showMoney, name_sub } = store;
+		let { disableBtn, name, phone, identity, sex, service, service_item, bank_id, day, money,showMoney, name_sub, remark, showMoneyType, money_type_list } = store;
 		if(!disableBtn){
 			let params = {
-				name, phone, identity, sex, service, service_item, bank_id, day
+				name, phone, identity, sex, service, service_item, bank_id, day, remark
 			};
 			if(showMoney) {
 				params.money = money;
@@ -228,6 +264,14 @@ class AppointmentNew extends Component{
 			if(name_sub){
 				params.name_sub = name_sub;
 			}
+			if(showMoneyType){
+				let denominations = Array.from(money_type_list).filter(money => {
+					if(money.checked) return true;
+					return false;
+				});
+				params.denomination = denominations.join(',');
+			}
+			params.remark = remark || '';
 			Toast.loading('提交中，请稍后...', 30);
 			axios.post('/api/v1/order/save', params)
 				.then(res => {

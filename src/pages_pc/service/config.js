@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Form, Input, Radio, message } from 'antd';
+import { Table, Button, Modal, Form, Input, Radio, message, TimePicker } from 'antd';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
 const { TextArea } = Input;
@@ -10,23 +10,33 @@ import store from '../../stores/service.config';
 import getToken from '../../helpers/get_token';
 import haveError from '../../helpers/have_error';
 import axios from 'axios';
+import moment from 'moment';
 //增加与修改service
 @observer
 class AddNEditService extends Component{
 	render(){
 		let { visible, form, editType } = this.props;
-		let { getFieldDecorator } = form;
-		let { editItem, modalLoading } = store;
+		let { getFieldDecorator, getFieldsValue } = form;
+		let { editItem, modalLoading, time_begin, time_end } = store;
 		let inits = {
+			time_begin: time_begin,
+			time_end: time_end,
 			money: '1',
 			category: '',
-			item: ''
+			item: '',
+			money_type: '1'
 		};
 		if(editType === 'edit'){
+			inits.time_begin = time_begin;
+			inits.time_end = time_end;
 			inits.money = '' + editItem.money;
 			inits.category = editItem.category;
-			inits.item = editItem.item.join('/')
+			inits.item = editItem.item.join('/');
+			inits.money_type = '' + editItem.money_type;
 		}
+		let money = getFieldsValue(['money']).money || inits.money;
+		let showMoneyType =  money === '1';
+
 		return (
 			<Modal
 				confirmLoading={modalLoading}
@@ -39,6 +49,17 @@ class AddNEditService extends Component{
 				cancelText='取消'
 				title={<p className={multipleClass(modalStyle, 'modal-title')}>{editType === 'add' ? '新增' : '编辑'}服务<small>填写服务类别与内容</small></p>}>
 				<Form>
+					<Form.Item label='预约受理时间' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('times', {
+						initialValue: inits.times,
+						rules: [{
+							required: true,
+							message: '请选择预约受理时间'
+						}]
+					})(
+						<React.Fragment>
+							<TimePicker allowEmpty={false} format='mm:ss' defaultValue={inits.time_begin}/> - <TimePicker format='mm:ss' allowEmpty={false} defaultValue={inits.time_end}/>
+						</React.Fragment>
+					)}</Form.Item>
 					<Form.Item label='预约金额' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('money', {
 						initialValue: inits.money,
 						rules: [{
@@ -51,6 +72,20 @@ class AddNEditService extends Component{
 							<Radio value='2'>不需要</Radio>
 						</Radio.Group>
 					)}</Form.Item>
+					{!showMoneyType ? null : 
+						<Form.Item label='预约金额类型' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('money_type', {
+							initialValue: inits.money_type,
+							rules: [{
+								required: true,
+								message: '请选择预约金额类型'
+							}]
+						})(
+							<Radio.Group>
+								<Radio value='1'>大额预约</Radio>
+								<Radio value='2'>小额预约</Radio>
+							</Radio.Group>
+						)}</Form.Item>
+					}
 					<Form.Item label='服务类别' labelCol={{span: 6}} wrapperCol={{span: 12}}>{getFieldDecorator('category', {
 						initialValue: inits.category,
 						rules: [{
@@ -74,13 +109,19 @@ class AddNEditService extends Component{
 		)
 	}
 	confirm = () => {
-		this.props.form.validateFields();
-		let errors = this.props.form.getFieldsError();
+		this.props.form.validateFields(['money', 'money_type', 'category', 'item']);
+		let errors = this.props.form.getFieldsError(['money', 'money_type', 'category', 'item']);
 		if(!haveError(errors)){
 			store.modalLoading = true;
 			let token = getToken();
 			if(token){
 				let values = this.props.form.getFieldsValue();
+				let { time_begin, time_end } = store;
+				if(values.money === '2'){//不需要预约金额
+					delete values.money_type;
+				}
+				values.time_begin = time_begin.format('mm:ss');
+				values.time_end = time_end.format('mm:ss');
 				if(this.props.editType === 'add'){
 					axios.post('/api/v1/service/save', {
 						...values
@@ -125,6 +166,8 @@ class AddNEditService extends Component{
 	closeModal = () => {
 		store.visible = false;
 		store.editItem = {};
+		store.time_begin = moment('08:00', 'mm:ss');
+		store.time_end = moment('15:00', 'mm:ss');
 		store.modalLoading = false;
 	}
 }
@@ -178,6 +221,10 @@ class ServiceConfig extends Component{
 	};
 	editItem = record => {
 		store.editItem = record;
+		let time_begin = record.time_begin || '08:00:00';
+		let time_end = record.time_end || '15:00:00';
+		store.time_begin = moment(time_begin, 'mm:ss:SS');
+		store.time_end = moment(time_end, 'mm:ss:SS');
 		this.openModal();
 	};
 	deleteItem = (record) => {

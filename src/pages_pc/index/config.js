@@ -20,24 +20,28 @@ class AddIndex extends Component{
 	render(){
 		let { modalLoading, selectItem, logo } = store;
 		let { visible, form, editType } = this.props;
-		let { getFieldDecorator } = form;
+		let { getFieldDecorator, getFieldsValue } = form;
 		let inits = {
 			logo: '',
 			url: '',
-			type: module_key
+			type: module_key,
+			index_type: '1'
 		};
 		let disabledRadio = false;//编辑时禁止切换图片类型
 		if(editType === 'edit'){
 			inits.logo = selectItem.logo;
 			inits.url = selectItem.url;
 			inits.type = '' + selectItem.type;
+			let index_type = selectItem.index_type || '1'
+			inits.index_type = '' + index_type;
 			disabledRadio = true;
 		}
 		if(!logo){
 			logo = inits.logo;
 		}
+		let showIndexType = getFieldsValue(['type']).type === module_key;
 		return (
-			<Modal visible={visible} destroyOnClose={true} confirmLoading={modalLoading} onCancel={this.closeModal} cancelText='取消' onOk={this.confirm} okText='确认' title={<p className={multipleClass(modalStyle, 'modal-title')}>新建首页<small>上传首页图片和链接</small></p>}>
+			<Modal width={800} visible={visible} destroyOnClose={true} confirmLoading={modalLoading} onCancel={this.closeModal} cancelText='取消' onOk={this.confirm} okText='确认' title={<p className={multipleClass(modalStyle, 'modal-title')}>新建首页<small>上传首页图片和链接</small></p>}>
 				<Form>
 					<Form.Item wrapperCol={{push: 6,span: 10}}>{getFieldDecorator('logo', {
 						initialValue: inits.logo,
@@ -69,6 +73,21 @@ class AddIndex extends Component{
 							<Radio value={carousel_key}>{carousel_word}</Radio>
 						</Radio.Group>
 					)}</Form.Item>
+					{!showIndexType ? null : 
+						<Form.Item label='模块图分类' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('index_type', {
+							initialValue: inits.index_type,
+							rules: [{
+								required: true,
+								message: '请选择首页模块图分类'
+							}]
+						})(
+							<Radio.Group>
+								<Radio value={'1'}>电子银行业务</Radio>
+								<Radio value={'2'}>银行预约分类</Radio>
+								<Radio value={'3'}>公司业务</Radio>
+							</Radio.Group>
+						)}</Form.Item>
+					}
 					<Form.Item label='链接' labelCol={{span: 6}} wrapperCol={{span: 14}}>{getFieldDecorator('url', {
 						initialValue: inits.url,
 						rules: [{
@@ -97,7 +116,7 @@ class AddIndex extends Component{
 		this.props.form.validateFields();
 		let errors = this.props.form.getFieldsError();
 		if(!haveError(errors)){
-			let { url, type } = this.props.form.getFieldsValue();
+			let { url, type, index_type } = this.props.form.getFieldsValue();
 			let { logo, selectItem } = store;
 			let token = getToken();
 			if(token){
@@ -105,6 +124,9 @@ class AddIndex extends Component{
 				let params = {
 					url: url
 				};
+				if(type === module_key){
+					params.index_type = index_type;
+				}
 				if(!!selectItem.id){//修改
 					if(logo){
 						let dealLogo = logo.replace(/^data:.*base64,/, '');
@@ -125,7 +147,6 @@ class AddIndex extends Component{
 										item.logo = logo || store.selectItem.logo;
 										item.url = url
 									}
-									console.log(item);
 									return item;
 								});
 								store.indexList = list;
