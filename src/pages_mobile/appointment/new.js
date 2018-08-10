@@ -235,7 +235,7 @@ class AppointmentNew extends Component{
 					}
 				});
 				let time_begin = type.time_begin || '08:00:00';
-				let time_end = type.time_end || '15:00';
+				let time_end = type.time_end || '15:00:00';
 				store.time_begin = moment(time_begin, 'mm:ss:SS');
 				store.time_end = moment(time_end, 'mm:ss:SS');
 				store.minMaxDate = getMinMaxDate();
