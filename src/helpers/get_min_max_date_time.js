@@ -39,9 +39,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 			minTime = moment().hour(startHour).minute(startMinute);
 		}
 	maxTime = moment().hour(endHour).minute(endMinute);
-	console.log('comouted', minTime, maxTime);
-	console.log('minTime', moment.isMoment(minTime));
-	console.log('maxTime', moment.isMoment(maxTime));
+	console.log('minTime', minTime.format('mm:ss'), minTime.toDate());
 	return {
 		minDate: minTime.toDate(),
 		maxDate: maxTime.toDate(),
