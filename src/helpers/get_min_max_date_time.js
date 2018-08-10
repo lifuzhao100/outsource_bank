@@ -25,7 +25,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		startMinute = time_begin.minute(),
 		endHour = time_end.hour(),
 		endMinute = time_end.minute();
-	console.log(time_begin, time_end);
+	console.log('origin', time_begin, time_end);
 	if(dateString === nowString){
 		if(now.hour() < startHour ){
 			minTime = time_begin;
@@ -47,7 +47,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		minTime = time_begin;
 	}
 	maxTime = time_end;
-	console.log(minTime, maxTIme);
+	console.log('comouted', minTime.toDate(), maxTIme.toDate());
 	return {
 		minDate: minTime.toDate(),
 		maxDate: maxTime.toDate(),
