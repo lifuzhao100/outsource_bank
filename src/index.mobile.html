@@ -11,8 +11,14 @@
     <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="/build/static/moment.min.js"></script>
     <script src="/build/static/zh-cn.js"></script>
-	<script src="/build/static/vconsole.min.js"></script>
-	<script src='/build/static/vconsole.init.js"'></script>
+    <!-- 开启vonsole -->
+    
+        <script src="/build/static/vconsole.min.js"></script>
+        <script>
+            var vConsole = new VConsole();
+            window.vConsole = vConsole;
+        </script>
+    
     <script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
     <script>
 			if ('addEventListener' in document) {
