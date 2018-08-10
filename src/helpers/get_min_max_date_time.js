@@ -21,11 +21,7 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		dateString = moment(date).format('YYYY-MM-DD'),
 		minTime,
 		maxTime,
-		startHour = time_begin.hour(),
-		startMinute = time_begin.minute(),
-		endHour = time_end.hour(),
-		endMinute = time_end.minute();
-	console.log('origin', time_begin, time_end);
+		startHour = time_begin.hour();
 	try{
 		if(dateString === nowString){
 			if(now.hour() < startHour ){
