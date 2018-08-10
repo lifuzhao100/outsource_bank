@@ -15,8 +15,7 @@ import moment from 'moment';
 class AppointmentNew extends Component{
 	constructor(props){
 		super(props);
-		let { time_begin, time_end } = store;
-		store.minMaxDate = getMinMaxDate(time_begin, time_end);
+		store.minMaxDate = getMinMaxDate();
 	}
 	componentDidMount(){
 		this.getServiceList();
@@ -239,7 +238,7 @@ class AppointmentNew extends Component{
 				let time_end = type.time_end || '15:00';
 				store.time_begin = moment(time_begin, 'mm:ss:SS');
 				store.time_end = moment(time_end, 'mm:ss:SS');
-				store.minMaxDate = getMinMaxDate(store.time_begin, store.time_end);
+				store.minMaxDate = getMinMaxDate();
 			}
 		});
 		store.service_content_list = item;

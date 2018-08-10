@@ -54,22 +54,18 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		defaultDate: minTime.toDate()
 	}
 }
-let getMinMaxDate = (time_begin, time_end) => {
+let getMinMaxDate = () => {
 	let now = moment(),
 		minDate,
 		maxDate,
 		addIndex = 0;
-	let endHour = time_end.hour(),
-		endMinute = time_end.minute();
-	let startHour = time_begin.hour(),
-		startMinute = time_begin.minute();
-	if(now.hour() > endHour || (now.hour() === endHour && now.minute() > endMinute)){
+	if(now.hour() > 15 || (now.hour() === 15 && now.minute() > 0)){
 		addIndex += 1;
-		minDate = moment().add(addIndex, 'd').hour(startHour).minute(startMinute);
+		minDate = moment().add(addIndex, 'd').hour(8).minute(0);
 	}else{
 		minDate = moment().minute(0);
 	}
-	maxDate = moment().add(addIndex + 2, 'd').hour(endHour).minute(endMinute);
+	maxDate = moment().add(addIndex + 2, 'd').hour(15).minute(0);
 	return {
 		minDate: minDate.toDate(),
 		maxDate: maxDate.toDate()

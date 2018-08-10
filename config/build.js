@@ -45,8 +45,8 @@ module.exports = {
 					beautify: false,
 					comments: false,
 					compress: {
-						warnings: false,
-						drop_console: true,
+						// warnings: false,
+						// drop_console: true,
 						collapse_vars: true,
 						reduce_vars: true
 					}
