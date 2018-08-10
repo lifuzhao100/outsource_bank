@@ -21,10 +21,13 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 		dateString = moment(date).format('YYYY-MM-DD'),
 		minTime,
 		maxTime,
-		startHour = time_begin.hour();
+		startHour = time_begin.hour(),
+		startMinute = time_begin.minute(),
+		endHour = time_end.hour(),
+		endMinute = time_end.minute();
 		if(dateString === nowString){
 			if(now.hour() < startHour ){
-				minTime = time_begin;
+				minTime = moment().hour(startHour).minute(startMinute);
 			}else{
 				if(moment().minute() > 30){
 					minTime = moment().add(1, 'h').minute(0);
@@ -33,9 +36,9 @@ let getMinMaxTime = (date, time_begin, time_end) => {
 				}
 			}
 		}else{
-			minTime = time_begin;
+			minTime = moment().hour(startHour).minute(startMinute);
 		}
-	maxTime = time_end;
+	maxTime = moment().hour(endHour).minute(endMinute);
 	console.log('comouted', minTime, maxTime);
 	console.log('minTime', moment.isMoment(minTime));
 	console.log('maxTime', moment.isMoment(maxTime));
