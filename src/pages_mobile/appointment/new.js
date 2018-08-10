@@ -104,7 +104,7 @@ class AppointmentNew extends Component{
 						</List>
 					) : null }
 				</List>
-				<List renderHeader={() => `预约受理时间: ${time_begin.format('mm:ss')} ~ ${time_end.format('mm:ss')}`}>
+				<List renderHeader={() => `预约受理时间: ${time_begin.format('HH:mm')} ~ ${time_end.format('HH:mm')}`}>
 					<DatePicker
 						mode='date'
 						onChange={this.handleDate}
@@ -236,8 +236,8 @@ class AppointmentNew extends Component{
 				});
 				let time_begin = type.time_begin || '08:00:00';
 				let time_end = type.time_end || '15:00:00';
-				store.time_begin = moment(time_begin, 'mm:ss:SS');
-				store.time_end = moment(time_end, 'mm:ss:SS');
+				store.time_begin = moment(time_begin, 'HH:mm:ss');
+				store.time_end = moment(time_end, 'HH:mm:ss');
 				store.minMaxDate = getMinMaxDate();
 			}
 		});
