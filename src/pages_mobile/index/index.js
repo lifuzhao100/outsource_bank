@@ -55,6 +55,7 @@ class Index extends Component{
 						<Grid
 							columnNum={3}
 							data={eBankList}
+							square={false}
 							renderItem={dataItem => (
 								<a href={dataItem.url}>
 									<img src={dataItem.logo} style={{width: '100%'}}/>
@@ -69,6 +70,7 @@ class Index extends Component{
 						<Grid
 							columnNum={3}
 							data={bankBookList}
+							square={false}
 							renderItem={dataItem => (
 								<a href={dataItem.url}>
 									<img src={dataItem.logo} style={{width: '100%'}}/>
@@ -83,6 +85,7 @@ class Index extends Component{
 						<Grid
 							columnNum={3}
 							data={companyList}
+							square={false}
 							renderItem={dataItem => (
 								<a href={dataItem.url}>
 									<img src={dataItem.logo} style={{width: '100%'}}/>
