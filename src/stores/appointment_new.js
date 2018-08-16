@@ -36,8 +36,8 @@ class Store {
 	@observable money;
 	@observable remark = '';
 	@observable name_sub;
-	@observable time_begin = moment('08:00', 'mm:ss');
-	@observable time_end = moment('15:00', 'mm:ss');
+	@observable time_begin = moment('08:00', 'HH:mm');
+	@observable time_end = moment('15:00', 'HH:mm');
 	@observable minMaxDate = {};
 	@observable minMaxTime = {};
 	@computed get init(){

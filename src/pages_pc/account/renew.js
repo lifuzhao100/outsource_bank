@@ -112,8 +112,22 @@ class Renew extends Component{
 						history.push('/login');
 					}, 2000);
 				})
-				.catch(res => {
-
+				.catch(err => {
+					let response = err.response;
+					if(response){
+						let data = response.data;
+						if(data.error_code === 30005){
+							this.props.form.setFields({
+								old_pwd: {
+									value: old_pwd,
+									error: [new Error(data.msg)]
+								}
+							})
+						}else{
+							history.push('/login');
+						}
+					}
+					// history.push('/login');
 				})
 		}
 	}

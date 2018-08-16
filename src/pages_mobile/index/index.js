@@ -10,7 +10,7 @@ import bottomImg from '../../imgs/bottom.png';
 import eBankImg from '../../imgs/e_bank.png';
 import bankBookImg from '../../imgs/bank_book.png';
 import companyImg from '../../imgs/company.png';
-console.log(styles);
+import fujinImg from '../../imgs/fujin.png';
 @observer
 class Index extends Component{
 	constructor(props){
@@ -93,13 +93,18 @@ class Index extends Component{
 							)}
 						/>
 					</section>
-					<a className={multipleClass(styles,'map-container')} onClick={(e) => this.showBankPanel(true, e)}>
-						<div style={{position: 'absolute', width: '100%', height: '100%'}}>
-							<div id='container' className={multipleClass(styles, 'container')}>
-								{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
+					<section>
+						<h3>
+							<img src={fujinImg} style={{width: '100%'}}/>
+						</h3>
+						<a className={multipleClass(styles,'map-container')} onClick={(e) => this.showBankPanel(true, e)}>
+							<div style={{position: 'absolute', width: '100%', height: '100%'}}>
+								<div id='container' className={multipleClass(styles, 'container')}>
+									{locationFail ? <img src={bottomImg} style={{width: '100%'}}/> : null}
+								</div>
 							</div>
-						</div>
-					</a>
+						</a>
+					</section>	
 					<Drawer
 						onOpenChange={() => this.showBankPanel(!open)}
 						style={{ minHeight: document.documentElement.clientHeight, zIndex: open ? 9999 : -1, position: 'fixed'}}

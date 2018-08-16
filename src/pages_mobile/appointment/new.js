@@ -142,6 +142,7 @@ class AppointmentNew extends Component{
 			.then(res => {
 				let resData = res.data;
 				store.origin_service_type_list = resData;
+				resData.sort((a,b) => a.order - b.order);
 				store.service_type_list = resData.map(item => {
 					return {
 						label: item.category,

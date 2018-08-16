@@ -300,6 +300,30 @@ class IndexConfig extends Component{
 		store.selectItem = record;
 		this.openModal();
 	};
+	deleteIndexConfig(e,record){
+		e.preventDefault();
+		let token = getToken();
+		if(token){
+			store.tableLoading = true;
+			axios.post('/api/v1/nav/state', {
+				state: 3,
+				id: record.id
+			}, {headers:{token}})
+				.then(res => {
+					let list = Array.from(store.indexList).filter(item => {
+						if(item.id === record.id){
+							return false;
+						}
+						return true;
+					});
+					store.indexList = list;
+					store.tableLoading = false;
+				})
+				.catch(res => {
+					store.tableLoading = false;
+				});
+		}
+	}
 	openModal = () => {
 		store.visible = true;
 	};
@@ -332,6 +356,7 @@ class IndexConfig extends Component{
 			<div className={multipleClass(styles, 'operate')}>
 				<a onClick={(e) => this.handleIndexConfigState(e, record)}>{record.state === 1 ? '停用' : '启用'}</a>
 				<a onClick={(e) => this.editIndexConfig(e, record)}>编辑</a>
+				<a onClick={(e) => this.deleteIndexConfig(e, record)}>删除</a>
 			</div>
 		)
 	}]

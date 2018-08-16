@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Form, Input, Radio, message, TimePicker } from 'antd';
+import { Table, Button, Modal, Form, Input, Radio, message, TimePicker, InputNumber } from 'antd';
 import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
 const { TextArea } = Input;
@@ -26,7 +26,10 @@ class AddNEditService extends Component{
 			item: '',
 			money_type: '1'
 		};
+		let showOrder = false;
 		if(editType === 'edit'){
+			showOrder = true;
+			inits.order = editItem.order;
 			inits.time_begin = time_begin;
 			inits.time_end = time_end;
 			inits.money = '' + editItem.money;
@@ -91,6 +94,20 @@ class AddNEditService extends Component{
 							</Radio.Group>
 						)}</Form.Item>
 					}
+					{!showOrder ? null : 
+						<Form.Item label='排序' labelCol={{span: 6}} wrapperCol={{span: 12}}>{getFieldDecorator('order', {
+							initialValue: inits.order,
+							rules: [{
+								required: true,
+								message: '请输入服务排序'
+							}, {
+								pattern: /[1-9][0-9]*/,
+								message: '服务排序最小值为1'
+							}]
+						})(
+							<InputNumber placeholder='请输入服务排序'/>
+						)}</Form.Item>
+					}
 					<Form.Item label='服务类别' labelCol={{span: 6}} wrapperCol={{span: 12}}>{getFieldDecorator('category', {
 						initialValue: inits.category,
 						rules: [{
@@ -114,8 +131,8 @@ class AddNEditService extends Component{
 		)
 	}
 	confirm = () => {
-		this.props.form.validateFields(['money', 'money_type', 'category', 'item']);
-		let errors = this.props.form.getFieldsError(['money', 'money_type', 'category', 'item']);
+		this.props.form.validateFields(['money', 'money_type', 'category', 'item', 'order']);
+		let errors = this.props.form.getFieldsError(['money', 'money_type', 'category', 'item','order']);
 		if(!haveError(errors)){
 			store.modalLoading = true;
 			let token = getToken();
@@ -213,6 +230,7 @@ class ServiceConfig extends Component{
 			})
 				.then(res => {
 					let resData = res.data;
+					resData.sort((a,b) => a.order - b.order);
 					store.service_list = resData;
 				})
 				.catch(res => {
@@ -262,6 +280,10 @@ class ServiceConfig extends Component{
 		})
 	};
 	columns = [{
+		title: '排序',
+		key: 'order',
+		dataIndex: 'order'
+	},{
 		title: '服务类别',
 		key: 'category',
 		dataIndex: 'category'
