@@ -71,7 +71,7 @@ class AddBank extends Component{
 					})(
 						<Input placeholder='请输入银行地址'/>
 					)}</Form.Item>
-					{!!init.order ? (
+					{this.props.selectItem ? (
 						<Form.Item label='排序' labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>{getFieldDecorator('order', {
 							initialValue: init.order,
 							rules: [{
@@ -113,7 +113,7 @@ class AddBank extends Component{
 			let token = getToken();
 			if(token){
 				store.modalLoading = true;
-				let {  name, address } = form.getFieldsValue();
+				let {  name, address, order } = form.getFieldsValue();
 				let { logo } = store;
 				let dealLogo = logo.replace(/^data:.*base64,/, '');
 				let params = {
@@ -126,6 +126,7 @@ class AddBank extends Component{
 						params.logo = dealLogo;
 					}
 					params.id = selectItem.id;
+					params.order = order
 					axios.post('/api/v1/bank/update', params, {
 						headers: {
 							token
@@ -266,6 +267,37 @@ class BankConfig extends Component{
 				})
 		}
 	};
+	deleteBank(id){
+		Modal.confirm({
+			title: '删除银行?',
+			content: '确认后将删掉该条数据',
+			okText: '确认',
+			okType: 'danger',
+			cancelText: '取消',
+			onOk:() => {
+				let token = getToken()
+				if(token){
+					axios.post('/api/v1/bank/update', {
+						id: id,
+						state: 3
+					}, {
+						headers: {
+							token
+						}
+					}).then(res => {
+						this.getBankList();
+					})
+					.catch(res => {
+						message.error(res.data.msg);
+					})
+				}
+				
+			},
+			onCancel() {
+				
+			}
+		})
+	}
 	columns = [{
 		key: 'id',
 		title: 'ID',
@@ -300,8 +332,10 @@ class BankConfig extends Component{
 				{/*
 				1表示启用中
 				2表示已停用
+				3表示删除
 				*/}
 				<a onClick={() => this.changeState(record.id , record.state === 1 ? '2' : '1')}>{record.state === 1 ? '停用' : '启用'}</a>
+				<a onClick={() => this.deleteBank(record.id)}>删除</a>	
 				{record.user ? <a onClick={() => this.unbindAdmin(record)}>解绑管理员</a> : null}
 			</div>
 		)
