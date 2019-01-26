@@ -31,6 +31,7 @@
     "antd-mobile": "^2.1.10",
     "axios": "^0.18.0",
     "history": "^4.7.2",
+    "jquery": "^3.3.1",
     "koa": "^2.5.1",
     "koa-better-serve": "^2.0.7",
     "koa-compress": "^3.0.0",
@@ -51,7 +52,8 @@
   "scripts": {
     "dev": "webpack-dev-server --config=config/dev.js --hot",
     "build": "webpack --config=config/build.js --progress --profile --json > stats.json",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lite": "lite-server"
   },
   "keywords": [],
   "author": "",

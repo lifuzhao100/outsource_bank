@@ -24,6 +24,7 @@ class BasicLayout extends Component{
 					<div className={multipleClass(styles, 'header')}>
 						<div style={{float: 'left'}}>
 							<Button onClick={() => history.push('/')}>预约管理</Button>
+              <Button style={{marginLeft: 20}} onClick={() => history.push('/wechat/config')}>微信自定义菜单</Button>
 						</div>
 						<div className={multipleClass(styles, 'header-right')}>
 							<Popconfirm placement='bottomRight' onConfirm={this.doLogout} cancelText='取消' okText='确认' title='是否确认退出登录？'>
