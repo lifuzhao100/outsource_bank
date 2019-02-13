@@ -1,0 +1,7 @@
+{
+  "server": {
+    "routes": {
+      "/build/static": "./static-build"
+    }
+  }
+}
